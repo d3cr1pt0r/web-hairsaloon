@@ -13,7 +13,11 @@ return array(
 	|
 	*/
 
+<<<<<<< HEAD
 	'debug' => false,
+=======
+	'debug' => true,
+>>>>>>> a9952179ee9574bad1615d0fec2b1dad3dbce625
 
 	/*
 	|--------------------------------------------------------------------------
@@ -78,7 +82,11 @@ return array(
 	|
 	*/
 
+<<<<<<< HEAD
 	'key' => 'M1poAyLGZncPjgCM6s1cBzM8am10VPgi',
+=======
+	'key' => 'ppx8MqHF5rp6k7Vx3wF3ut8aTplJ9BKF',
+>>>>>>> a9952179ee9574bad1615d0fec2b1dad3dbce625
 
 	'cipher' => MCRYPT_RIJNDAEL_128,
 

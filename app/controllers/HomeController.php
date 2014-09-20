@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 class HomeController extends BaseController {
 
 	/*
@@ -21,3 +22,15 @@ class HomeController extends BaseController {
 	}
 
 }
+=======
+class HomeController extends BaseController
+{
+
+	public function getIndex()
+	{
+		$view = View::make('frontend.home');
+		return $view;
+	}
+
+}
+>>>>>>> a9952179ee9574bad1615d0fec2b1dad3dbce625
