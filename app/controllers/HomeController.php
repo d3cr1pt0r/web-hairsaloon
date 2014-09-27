@@ -6,7 +6,8 @@ class HomeController extends BaseController
 	public function getIndex()
 	{
 		$view = View::make('frontend.home');
-		return $view;
+		$view->title = 'Title';
+		return $view;		
 	}
 
 }

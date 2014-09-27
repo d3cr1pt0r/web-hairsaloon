@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Hairsaloon</title>
+	@include('frontend.parts.header')
 </head>
 <body>
 	@yield('content')
+	@include('frontend.parts.footer')
 </body>
 </html>

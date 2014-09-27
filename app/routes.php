@@ -12,3 +12,13 @@
 */
 
 Route::controller('/', 'HomeController');
+
+/*
+Route::get('drek/salama', function() {
+	$view = View::make('frontend.');
+	$view->title = 'This is a title';
+	$view->list = array('drek' => 'salama', 'penis' => 'phallus');
+
+	return $view;
+});
+*/
