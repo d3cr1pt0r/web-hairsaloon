@@ -11,11 +11,4 @@
 |
 */
 
-<<<<<<< HEAD
-Route::get('/', function()
-{
-	return View::make('hello');
-});
-=======
 Route::controller('/', 'HomeController');
->>>>>>> a9952179ee9574bad1615d0fec2b1dad3dbce625
