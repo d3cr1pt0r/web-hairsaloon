@@ -48,6 +48,12 @@ Route::filter('auth', function()
 	}
 });
 
+Route::filter('auth.admin', function(){
+	if(!Auth::check() || Auth::user()->access_type >= 5)
+	{
+		return Redirect::to('admin/login')->with('error', 'Unauthorized!');
+	}
+});
 
 Route::filter('auth.basic', function()
 {
