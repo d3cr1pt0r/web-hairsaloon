@@ -11,6 +11,29 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	protected $table = 'users';
 
-	protected $hidden = array('password', 'remember_token');
+	protected $hidden = array('remember_token');
 
+	public static function AuthenticateAdmin($email, $password)
+	{
+		$user = User::where('email', '=', $email)->first();
+		if($user == null) return false;
+		if(Hash::check($password, $user->password) && $user->access_level < 5)
+		{
+			Auth::login($user);
+			return true;
+		}
+		return false;
+	}
+
+	public static function AuthenticateUser($email, $password)
+	{
+		$user = User::where('email', '=', $email)->first();
+		if($user == null) return false;
+		if(Hash::check($password, $user->password))
+		{
+			Auth::login($user);
+			return true;
+		}
+		return false;
+	}
 }

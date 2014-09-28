@@ -13,6 +13,7 @@
 					<label for="exampleInputPassword1">Password</label>
 					<input type="password" class="form-control" name="password" placeholder="Password">
 				</div>
+				<input type="hidden" name="login_type" value="admin">
 				<button type="submit" class="btn btn-default">Submit</button>
 			{{ Form::close() }}
 		</div>
