@@ -2,6 +2,7 @@
 
 class AdminController extends BaseAdminController
 {
+	
 	public function __construct()
 	{
 		$this->beforeFilter('auth.admin', array('except' => array('getLogin', 'postLogin')));
@@ -30,19 +31,16 @@ class AdminController extends BaseAdminController
 		// Process user input
 		$email = Input::get('email');
 		$password = Input::get('password');
-		$login_type = Input::get('login_type');
 		
 		// Validate user input
 		$validator = Validator::make(
 		    array(
 		        'email' => $email,
-		        'password' => $password,
-		        'login_type' => $login_type
+		        'password' => $password
 		    ),
 		    array(
 		        'email' => 'required|email',
-		        'password' => 'required',
-		        'login_type' => 'required'
+		        'password' => 'required'
 		    )
 		);
 
@@ -51,20 +49,10 @@ class AdminController extends BaseAdminController
 		else
 		{
 			// Try to authenticate user
-			if($login_type == 'admin')
-			{
-				if(User::AuthenticateAdmin($email, $password))
-					return Redirect::to('admin')->with('success', 'Login successful!');
-				else
-					return Redirect::to('admin/login')->with('error', 'Invalid credentials!');
-			}
-			if($login_type == 'user')
-			{
-				if(User::AuthenticateUser($email, $password))
-					return Redirect::to('/')->with('success', 'Login successful!');
-				else
-					return Redirect::to('/login')->with('error', 'Invalid credentials!');
-			}
+			if(User::AuthenticateAdmin($email, $password))
+				return Redirect::to('admin')->with('success', 'Login successful!');
+			else
+				return Redirect::to('admin/login')->with('error', 'Invalid credentials!');
 		}
 	}
 

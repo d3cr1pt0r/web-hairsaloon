@@ -19,6 +19,13 @@ Route::filter('auth.admin', function(){
 	}
 });
 
+Route::filter('auth.basic', function(){
+	if(!Auth::check())
+	{
+		return Redirect::to('login');
+	}
+});
+
 // Frontend filter
 /*
 Route::filter('guest', function()
