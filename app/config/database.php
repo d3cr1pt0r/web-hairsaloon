@@ -54,10 +54,10 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'forge',
-			'username'  => 'forge',
-			'password'  => '',
+			'host'      => '50.87.147.76',
+			'database'  => 'sqwid_web-hairsaloon',
+			'username'  => 'sqwid_hairsaloon',
+			'password'  => 'web-hairsaloondev1234',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

@@ -4,7 +4,10 @@
 	@include('backend.parts.header')
 </head>
 <body>
-	@include('backend.parts.navigation')
+	@if(Auth::check() && Auth::user()->access_type < 5)
+		@include('backend.parts.navigation')
+	@endif
+	@include('backend.parts.alerts')
 	@yield('content')
 </body>
 </html>
