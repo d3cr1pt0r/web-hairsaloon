@@ -2,11 +2,6 @@
 
 class AdminController extends BaseAdminController
 {
-	
-	public function __construct()
-	{
-		
-	}
 
 	public function getIndex()
 	{
@@ -14,16 +9,16 @@ class AdminController extends BaseAdminController
 		$view->page_title = $this->page_title;
 		$view->title = "Home";
 
-		return $view;
+		return $this->render($view);
 	}
 
 	public function getLogin()
 	{
 		// Show login form
 		$view = View::make('backend.login');
-		$view->title = "Admin -> Login";
+		$view->title = "Login";
 
-		return $view;
+		return $this->render($view);
 	}
 
 	public function postLogin()
