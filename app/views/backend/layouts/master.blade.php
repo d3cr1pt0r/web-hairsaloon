@@ -8,6 +8,8 @@
 		@include('backend.parts.navigation')
 	@endif
 	@include('backend.parts.alerts')
-	@yield('content')
+	<div class="container">
+		@yield('content')
+	</div>
 </body>
 </html>

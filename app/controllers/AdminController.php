@@ -5,14 +5,14 @@ class AdminController extends BaseAdminController
 	
 	public function __construct()
 	{
-		$this->beforeFilter('auth.admin', array('except' => array('getLogin', 'postLogin')));
-		$this->beforeFilter('csrf', array('only' => array('postLogin')));
+		
 	}
 
 	public function getIndex()
 	{
 		$view = View::make('backend.home');
-		$view->title = "Admin -> Home";
+		$view->page_title = $this->page_title;
+		$view->title = "Home";
 
 		return $view;
 	}
