@@ -19,7 +19,7 @@ class UserController extends BaseAdminController
 
 	public function getIndex()
 	{
-		$view = View::make('backend.users.home');
+		$view = View::make('backend.home');
 		$view->title = "Users";
 		$view->controller = 'users';
 		$view->table = "users";

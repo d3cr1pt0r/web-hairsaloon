@@ -4,9 +4,8 @@
 			{{ HTML::link('/admin', 'Hairsaloon', array('class' => 'navbar-brand')) }}
 		</div>
 		<ul class="nav navbar-nav">
-			<li>{{ HTML::link('/admin/users', 'Users') }}</li>
-			<li>{{ HTML::link('/admin/groups', 'Groups') }}</li>
-			<li>{{ HTML::link('/admin/tags', 'Tags & Categories') }}</li>
+			<li>{{ HTML::link('/admin/users', 'Uporabniki') }}</li>
+			<li>{{ HTML::link('/admin/services', 'Storitve') }}</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li>{{ HTML::link('', 'Hairsaloon page') }}</li>
