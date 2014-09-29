@@ -10,6 +10,9 @@ class AdminController extends BaseAdminController
 
 	public function getIndex()
 	{
+		$val = DB::table('users')->select('active')->where('id', 1)->first();
+		return var_dump(get_object_vars($val));
+
 		$view = View::make('backend.home');
 		$view->page_title = $this->page_title;
 		$view->title = "Home";
