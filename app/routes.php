@@ -14,6 +14,7 @@
 #Route::controller('/', 'HomeController');
 Route::controller('admin/users', 'UserController');
 Route::controller('admin', 'AdminController');
+Route::controller('actions', 'ActionController');
 
 /*
 Route::get('drek/salama', function() {

@@ -8,7 +8,7 @@ class BaseAdminController extends Controller
 	{
 		$this->beforeFilter('auth.admin', array('except' => array('getLogin', 'postLogin')));
 		$this->beforeFilter('csrf', array('only' => array('postLogin')));
-		
+
 		$this->page_title = "Admin";
 	}
 
@@ -16,5 +16,9 @@ class BaseAdminController extends Controller
 	{
 		$view->page_title = $this->page_title;
 		return $view;
+	}
+
+	public function filterData($table, $data = array()) {
+		return QueryHelper::andWhere($table,$data);
 	}
 }
