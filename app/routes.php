@@ -12,6 +12,7 @@
 */
 
 #Route::controller('/', 'HomeController');
+Route::controller('admin/services', 'ServiceController');
 Route::controller('admin/users', 'UserController');
 Route::controller('admin', 'AdminController');
 Route::controller('actions', 'ActionController');

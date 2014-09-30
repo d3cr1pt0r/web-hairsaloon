@@ -44,24 +44,28 @@
 	    		<tr>
 	    			@foreach($headers as $h)
 	    				@if($h["type"] == "normal")
-	    					<td>{{ $d[$h["db"]] }}</td>
+	    					<td><span>{{ $d->$h["db"] }}</span></td>
 	    				@elseif($h["type"] == "checkbox")
-	    					<td><input class="toggle" type="checkbox" table="{{ $table }}" item-id="{{ $d["id"] }}" name="{{ $h["db"] }}" {{ ($d[$h["db"]]==1 ? 'checked=checked':'') }} /></td>
+	    					<td><input class="toggle" type="checkbox" table="{{ $table }}" item-id="{{ $d->id }}" name="{{ $h["db"] }}" {{ ($d->$h["db"]==1 ? 'checked=checked':'') }} /></td>
 	    				@elseif($h["type"] == "mail_url")
-	    					<td><a href="mailto: {{ $d[$h["db"]] }}">{{ $d[$h["db"]] }}</a></td>
+	    					<td><a href="mailto: {{ $d->$h["db"] }}">{{ $d->$h["db"] }}</a></td>
+	    				@elseif($h["type"] == "timeperiod")
+	    					<td><span>{{ date('H:i:s',$d->$h["db"]); }}</span></td>
+	    				@elseif($h["type"] == "price")
+	    					<td><span>{{ $d->$h["db"] }} €</span></td>
 	    				@endif
 	    			@endforeach
 	    			<td align="right">
-	    				<a href="/admin/{{ $controller }}/open/{{ $d["id"] }}">
+	    				<a href="/admin/{{ $controller }}/open/{{ $d->id }}">
 	    					<button type="button" class="btn btn-default btn-sm">Odpri</button>
 	    				</a>
-	    				<a href="/admin/{{ $controller }}/edit/{{ $d["id"] }}">
+	    				<a href="/admin/{{ $controller }}/edit/{{ $d->id }}">
 	    					<button type="button" class="btn btn-default btn-sm">Uredi</button>
 	    				</a>
-	    				<a href="/admin/{{ $controller }}/duplicate/{{ $d["id"] }}">
+	    				<a href="/admin/{{ $controller }}/duplicate/{{ $d->id }}">
 	    					<button type="button" class="btn btn-default btn-sm">Kopiraj</button>
 	    				</a>
-	    				<a href="/admin/{{ $controller }}/delete/{{ $d["id"] }}" onclick="return confirm('Ali res želite izbrisati vsebino?');">
+	    				<a href="/admin/{{ $controller }}/delete/{{ $d->id }}" onclick="return confirm('Ali res želite izbrisati vsebino?');">
 	    					<button type="button" class="btn btn-danger btn-sm">Izbriši</button>
 	    				</a>
 	    			</td>
