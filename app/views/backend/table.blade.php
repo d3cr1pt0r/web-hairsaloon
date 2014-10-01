@@ -3,7 +3,7 @@
 @section('content')
 	<div class="row well well-sm">
 	<h2 style="float: left;">{{ $title }}</h2>
-	<a style="float: right; margin: 20px; margin-left: 5px;" href="">
+	<a style="float: right; margin: 20px; margin-left: 5px;" href="{{ '/admin/'.$controller.'/add' }}">
 		<button type="button" class="btn btn-primary btn-sm">Dodaj</button>
 	</a>
 	<button style="float: right; margin: 20px; margin-right: 0px;" type="button" class="btn btn-default btn-sm hide_filters">Skrij filter</button>
