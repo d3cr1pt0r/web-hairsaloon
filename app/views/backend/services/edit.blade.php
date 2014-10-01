@@ -2,6 +2,6 @@
 
 @section('content')
 	<div class="container">
-		<p>Services edit</p>
+		{{ Form::open(array('url' => 'admin/'.$controller.'/save', 'method' => 'post')) }}
 	</div>
 @stop

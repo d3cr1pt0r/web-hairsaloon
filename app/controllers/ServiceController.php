@@ -26,7 +26,7 @@ class ServiceController extends BaseAdminController
 		$view->controller = $this->controller;
 		$view->table = $this->table;
 
-		// Data		
+		// Data
 		$users = Service::all();
 
 		$view->filters = $this->filters;
@@ -43,12 +43,11 @@ class ServiceController extends BaseAdminController
 		$view->table = $this->table;
 
 		$data = array();
-		foreach(Input::all() as $key=>$val) 
-			if(!empty($val)) 
+		foreach(Input::all() as $key=>$val)
+			if(!empty($val))
 				$data[$key] = $val;
 
 		$users = $this->filterData($this->table, $data);
-
 
 		$view->filters = $this->filters;
 		$view->headers = $this->headers;
@@ -57,6 +56,30 @@ class ServiceController extends BaseAdminController
 		return $this->render($view);
 	}
 
+	public function getAdd()
+	{
+		$view = View::make('backend.services.edit');
+		$view->title = $this->title;
+		$view->controller = $this->controller;
+		$view->table = $this->table;
+
+		return $view;
+	}
+
+	public function getSave($id)
+	{
+		$view = View::make('backend.services.edit');
+		$view->title = $this->title;
+		$view->controller = $this->controller;
+		$view->table = $this->table;
+
+		return $view;
+	}
+
+	public function postSave($id=false)
+	{
+		
+	}
 }
 
 ?>
