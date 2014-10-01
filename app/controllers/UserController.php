@@ -20,7 +20,7 @@ class UserController extends BaseAdminController
 
 	public function getIndex()
 	{
-		$view = View::make('backend.home');
+		$view = View::make('backend.table');
 		$view->title = "Users";
 		$view->controller = 'users';
 		$view->table = "users";
@@ -36,7 +36,7 @@ class UserController extends BaseAdminController
 
 	public function postIndex()
 	{
-		$view = View::make('backend.home');
+		$view = View::make('backend.table');
 		$view->title = "Users";
 		$view->controller = 'users';
 		$view->table = "users";

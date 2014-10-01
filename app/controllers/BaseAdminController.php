@@ -15,6 +15,7 @@ class BaseAdminController extends Controller
 	protected function render($view)
 	{
 		$view->page_title = $this->page_title;
+		$view->controller = 'users';
 		return $view;
 	}
 

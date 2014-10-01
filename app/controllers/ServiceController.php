@@ -21,7 +21,7 @@ class ServiceController extends BaseAdminController
 
 	public function getIndex()
 	{
-		$view = View::make('backend.home');
+		$view = View::make('backend.table');
 		$view->title = $this->title;
 		$view->controller = $this->controller;
 		$view->table = $this->table;
@@ -37,7 +37,7 @@ class ServiceController extends BaseAdminController
 
 	public function postIndex()
 	{
-		$view = View::make('backend.home');
+		$view = View::make('backend.table');
 		$view->title = $this->title;
 		$view->controller = $this->controller;
 		$view->table = $this->table;
