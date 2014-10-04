@@ -37,7 +37,7 @@ class UserController extends BaseAdminController
 	public function postIndex()
 	{
 		$view = View::make('backend.table');
-		$view->title = "Users";
+		$view->title = "Uporabniki";
 		$view->controller = 'users';
 		$view->table = "users";
 
@@ -56,6 +56,13 @@ class UserController extends BaseAdminController
 		return $this->render($view);
 	}
 
+	public function getAdd() 
+	{
+		$view = View::make('backend.users.edit');
+		$view->title = "Dodaj uporabnika";
+
+		return $this->render($view);
+	}
 }
 
 ?>
