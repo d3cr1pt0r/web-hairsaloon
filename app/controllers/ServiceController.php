@@ -61,24 +61,88 @@ class ServiceController extends BaseAdminController
 		$view = View::make('backend.services.edit');
 		$view->title = $this->title;
 		$view->controller = $this->controller;
-		$view->table = $this->table;
 
-		return $view;
+		return $this->render($view);
 	}
 
-	public function getSave($id)
+	public function getEdit($id)
 	{
+		$service = Service::find($id);
+		if($service == null)
+			return Redirect::to('/admin/services')->with('error', 'Zahtevana storitev ne obstaja!');
+
+		// Change service time so input can later display it
+		$service->time = date('H:i', $service->time);
+
 		$view = View::make('backend.services.edit');
+		$view->service = $service;
 		$view->title = $this->title;
 		$view->controller = $this->controller;
-		$view->table = $this->table;
 
-		return $view;
+		return $this->render($view);
 	}
 
-	public function postSave($id=false)
+	public function getDelete($id)
 	{
+		$service = Service::find($id);
+		if($service == null)
+			return Redirect::to('/admin/services')->with('error', 'Zahtevana storitev ne obstaja!');
+
+		$service->delete();
+		return Redirect::to('admin/services')->with('success', 'Storitev je bila zbrisana!');
+	}
+
+	public function postSave()
+	{
+		// Process user input
+		$service_name = Input::get('name');
+		$service_price = Input::get('price');
+		$service_time = Input::get('time');
+		$service_time = explode(':', $service_time)[0]*60*60 + explode(':', $service_time)[1]*60;
+		$service_id = Input::get('id');
 		
+		// Validate user input
+		$validator = Validator::make(
+		    array(
+		        'name' => $service_name,
+		        'price' => $service_price,
+		        'time' => $service_time
+		    ),
+		    array(
+		        'name' => 'required',
+		        'price' => 'required',
+		        'time' => 'required'
+		    )
+		);
+
+		if ($validator->fails())
+			return Redirect::to('admin/services/add')->with('error', 'Validation error!');
+		else
+		{
+			if(!Input::has('id'))
+			{
+				$service = new Service;
+				$service->name = $service_name;
+				$service->price = $service_price;
+				$service->time = $service_time;
+				$service->save();
+
+				return Redirect::to('admin/services')->with('success', 'Storitev je bila dodana v sistem!');
+			}
+			else
+			{
+				$service = Service::find(Input::get('id'));
+				if($service == null)
+					return Redirect::to('admin/services')->with('error', 'Zahtevana storitev ne obstaja!');
+
+				$service->name = $service_name;
+				$service->price = $service_price;
+				$service->time = $service_time;
+				$service->save();
+
+				return Redirect::to('admin/services')->with('success', 'Storetev uspešno shranjena!');
+			}
+		}
 	}
 }
 

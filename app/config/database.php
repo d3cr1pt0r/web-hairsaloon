@@ -52,12 +52,25 @@ return array(
 			'prefix'   => '',
 		),
 
+		/*
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => '50.87.147.76',
 			'database'  => 'sqwid_web-hairsaloon',
 			'username'  => 'sqwid_hairsaloon',
 			'password'  => 'web-hairsaloondev1234',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
+		*/
+
+		'mysql' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'web-hairsaloon',
+			'username'  => 'root',
+			'password'  => '',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
