@@ -11,10 +11,10 @@
 			<div class="col-md-4">
 				<label>Vloga</label><br />
 				<select class="form-control" name="access_type">
-					<option value=1 {{ (($user->access_type==1) ? 'selected':'') }}>Super Admin</option>
-					<option value=2 {{ (($user->access_type==2) ? 'selected':'') }}>Admin</option>
-					<option value=3 {{ (($user->access_type==3) ? 'selected':'') }}>Frizer</option>
-					<option value=5 {{ (($user->access_type==5) ? 'selected':'') }}>Stranka</option>
+					<option value=1 {{ ((isset($user)) ? (($user->access_type==1) ? 'selected':'') : '') }}>Super Admin</option>
+					<option value=2 {{ ((isset($user)) ? (($user->access_type==2) ? 'selected':'') : '') }}>Admin</option>
+					<option value=3 {{ ((isset($user)) ? (($user->access_type==3) ? 'selected':'') : '') }}>Frizer</option>
+					<option value=5 {{ ((isset($user)) ? (($user->access_type==5) ? 'selected':'') : '') }}>Stranka</option>
 				</select>
 			</div>
 			<div class="col-md-4">
@@ -34,7 +34,9 @@
 				<input class="form-control" type="tel" name="phone" value="{{ $user->phone or '' }}" /><br />
 				<label>Datum rojstva</label><br />
 				<input class="form-control" type="date" name="birthdate" value="{{ $user->birthdate or '' }}" /><br />
+				@if(isset($user))
 				<input type="hidden" name="id" value="{{ $user->id }}" />
+				@endif
 			</div>
 		{{ Form::close() }}
 	</div>
