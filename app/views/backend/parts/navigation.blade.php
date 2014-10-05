@@ -6,6 +6,8 @@
 		<ul class="nav navbar-nav">
 			<li>{{ HTML::link('/admin/users', 'Uporabniki') }}</li>
 			<li>{{ HTML::link('/admin/services', 'Storitve') }}</li>
+			<li>{{ HTML::link('/admin/schedules', 'Urniki') }}</li>
+			<li>{{ HTML::link('/admin/shifts', 'Izmene') }}</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li>{{ HTML::link('', 'Hairsaloon page') }}</li>

@@ -6,29 +6,33 @@
 	<a style="float: right; margin: 20px; margin-left: 5px;" href="{{ '/admin/'.$controller.'/add' }}">
 		<button type="button" class="btn btn-primary btn-sm">Dodaj</button>
 	</a>
-	<button style="float: right; margin: 20px; margin-right: 0px;" type="button" class="btn btn-default btn-sm hide_filters">Skrij filter</button>
-	<button style="float: right; margin: 20px; margin-right: 0px; display: none;" type="button" class="btn btn-default btn-sm show_filters">Prikaži filter</button>
+	@if(isset($filters))
+		<button style="float: right; margin: 20px; margin-right: 0px;" type="button" class="btn btn-default btn-sm hide_filters">Skrij filter</button>
+		<button style="float: right; margin: 20px; margin-right: 0px; display: none;" type="button" class="btn btn-default btn-sm show_filters">Prikaži filter</button>
+	@endif
 </div>
-<div class="row well filters">
-	<form role="form" action="/admin/{{ $controller }}" method="post">
-		<div class="row">
-			@foreach($filters as $filter)
-				<div class="form-group col-md-3">
-					<label for="exampleInputEmail1">{{ $filter['label'] }}</label>
-					<input type="{{ $filter['type'] }}" class="form-control" name="{{ $filter['name'] }}" value="{{ (Input::has($filter['name']) ? Input::get($filter['name']):'') }}">
-				</div>
-			@endforeach
-		</div>
-		<div class=col-md-12>
-			<button name="submit" style="margin: 2px;" class="btn btn-default pull-right" type="submit">
-              <span class="glyphicon glyphicon-ok"></span> Uporabi
-          	</button> 
-			<a href="#!" onClick="location.reload(true)" type="button" style="margin: 2px;" class="btn btn-default pull-right">
-          		<span class="glyphicon glyphicon-repeat"></span> Počisti
-          	</a>
-		</div>
-	</form>
-</div>
+@if(isset($filters))
+	<div class="row well filters">
+		<form role="form" action="/admin/{{ $controller }}" method="post">
+			<div class="row">
+				@foreach($filters as $filter)
+					<div class="form-group col-md-3">
+						<label for="exampleInputEmail1">{{ $filter['label'] }}</label>
+						<input type="{{ $filter['type'] }}" class="form-control" name="{{ $filter['name'] }}" value="{{ (Input::has($filter['name']) ? Input::get($filter['name']):'') }}">
+					</div>
+				@endforeach
+			</div>
+			<div class=col-md-12>
+				<button name="submit" style="margin: 2px;" class="btn btn-default pull-right" type="submit">
+	              <span class="glyphicon glyphicon-ok"></span> Uporabi
+	          	</button> 
+				<a href="#!" onClick="location.reload(true)" type="button" style="margin: 2px;" class="btn btn-default pull-right">
+	          		<span class="glyphicon glyphicon-repeat"></span> Počisti
+	          	</a>
+			</div>
+		</form>
+	</div>
+@endif
 <div class="table-responsive">
 	<table class="table table-striped">
 	    <thead>

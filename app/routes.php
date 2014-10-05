@@ -12,6 +12,8 @@
 */
 
 #Route::controller('/', 'HomeController');
+Route::controller('admin/shifts', 'ShiftController');
+Route::controller('admin/schedules', 'ScheduleController');
 Route::controller('admin/services', 'ServiceController');
 Route::controller('admin/users', 'UserController');
 Route::controller('admin', 'AdminController');
