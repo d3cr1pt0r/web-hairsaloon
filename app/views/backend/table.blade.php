@@ -60,9 +60,6 @@
 	    				@endif
 	    			@endforeach
 	    			<td align="right">
-	    				<a href="/admin/{{ $controller }}/open/{{ $d->id }}">
-	    					<button type="button" class="btn btn-default btn-sm">Odpri</button>
-	    				</a>
 	    				<a href="/admin/{{ $controller }}/edit/{{ $d->id }}">
 	    					<button type="button" class="btn btn-default btn-sm">Uredi</button>
 	    				</a>
