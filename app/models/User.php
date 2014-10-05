@@ -17,7 +17,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	{
 		$user = User::where('email', '=', $email)->first();
 		if($user == null) return false;
-		if(Hash::check($password, $user->password) && $user->access_level < 5)
+		if(sha1($password) == $user->password && $user->access_level < 5)
 		{
 			Auth::login($user);
 			return true;
@@ -29,7 +29,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	{
 		$user = User::where('email', '=', $email)->first();
 		if($user == null) return false;
-		if(Hash::check($password, $user->password))
+		if(sha1($password) == $user->password)
 		{
 			Auth::login($user);
 			return true;

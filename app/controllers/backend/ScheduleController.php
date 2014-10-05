@@ -6,6 +6,8 @@ class ScheduleController extends BaseAdminController
 
 	public function getIndex()
 	{
+		return Hash::make('shitface');
+
 		$view = View::make('backend.schedules.view');
 		$view->title = $this->title;
 
@@ -13,11 +15,6 @@ class ScheduleController extends BaseAdminController
 
 		$view->schedules = $schedules;
 		return $this->render($view);
-	}
-
-	public function postIndex()
-	{
-		
 	}
 
 	public function getAdd()
