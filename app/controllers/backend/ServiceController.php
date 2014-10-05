@@ -94,20 +94,9 @@ class ServiceController extends BaseAdminController
 
 	public function postSave()
 	{
-		// Process user input
-		$service_name = Input::get('name');
-		$service_price = Input::get('price');
-		$service_time = Input::get('time');
-		$service_time = explode(':', $service_time)[0]*60*60 + explode(':', $service_time)[1]*60;
-		$service_id = Input::get('id');
-		
 		// Validate user input
 		$validator = Validator::make(
-		    array(
-		        'name' => $service_name,
-		        'price' => $service_price,
-		        'time' => $service_time
-		    ),
+		    Input::all(),
 		    array(
 		        'name' => 'required',
 		        'price' => 'required',
@@ -119,12 +108,16 @@ class ServiceController extends BaseAdminController
 			return Redirect::to('admin/services/add')->with('error', 'Validation error!');
 		else
 		{
+			// Process user input
+			$time = Input::get('time');
+			$time = explode(':', $time)[0]*60*60 + explode(':', $time)[1]*60;
+
 			if(!Input::has('id'))
 			{
 				$service = new Service;
-				$service->name = $service_name;
-				$service->price = $service_price;
-				$service->time = $service_time;
+				$service->name = Input::get('name');
+				$service->price = Input::get('price');
+				$service->time = $time;
 				$service->save();
 
 				return Redirect::to('admin/services')->with('success', 'Storitev je bila dodana v sistem!');
@@ -135,9 +128,9 @@ class ServiceController extends BaseAdminController
 				if($service == null)
 					return Redirect::to('admin/services')->with('error', 'Zahtevana storitev ne obstaja!');
 
-				$service->name = $service_name;
-				$service->price = $service_price;
-				$service->time = $service_time;
+				$service->name = Input::get('name');
+				$service->price = Input::get('price');
+				$service->time = $time;
 				$service->save();
 
 				return Redirect::to('admin/services')->with('success', 'Storetev uspešno shranjena!');

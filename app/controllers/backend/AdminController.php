@@ -22,17 +22,10 @@ class AdminController extends BaseAdminController
 	}
 
 	public function postLogin()
-	{
-		// Process user input
-		$email = Input::get('email');
-		$password = Input::get('password');
-		
+	{		
 		// Validate user input
 		$validator = Validator::make(
-		    array(
-		        'email' => $email,
-		        'password' => $password
-		    ),
+		    Input::all(),
 		    array(
 		        'email' => 'required|email',
 		        'password' => 'required'
@@ -44,7 +37,7 @@ class AdminController extends BaseAdminController
 		else
 		{
 			// Try to authenticate user
-			if(User::AuthenticateAdmin($email, $password))
+			if(User::AuthenticateAdmin(Input::get('email'), Input::get('password')))
 				return Redirect::to('admin')->with('success', 'Login successful!');
 			else
 				return Redirect::to('admin/login')->with('error', 'Invalid credentials!');

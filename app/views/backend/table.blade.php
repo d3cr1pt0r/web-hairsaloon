@@ -55,8 +55,12 @@
 	    					<td><a href="mailto: {{ $d->$h["db"] }}">{{ $d->$h["db"] }}</a></td>
 	    				@elseif($h["type"] == "timeperiod")
 	    					<td><span>{{ date('H:i:s',$d->$h["db"]); }}</span></td>
+	    				@elseif($h["type"] == "time")
+	    					<td><span>{{ date('H:i',$d->$h["db"]); }}</span></td>
 	    				@elseif($h["type"] == "price")
 	    					<td><span>{{ $d->$h["db"] }} €</span></td>
+	    				@elseif($h["type"] == "color")
+							<td><span style="display: block; width: 20px; height: 20px; background-color: {{ $d->$h["db"] }}; border: 1px solid #585858; border-radius: 3px;"	></span></td>
 	    				@endif
 	    			@endforeach
 	    			<td align="right">
