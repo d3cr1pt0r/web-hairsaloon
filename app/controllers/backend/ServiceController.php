@@ -84,58 +84,35 @@ class ServiceController extends BaseAdminController
 
 	public function getDelete($id)
 	{
-		$service = Service::find($id);
-		if($service == null)
-			return Redirect::to('/admin/services')->with('error', 'Zahtevana storitev ne obstaja!');
-
-		$service->delete();
-		return Redirect::to('admin/services')->with('success', 'Storitev je bila zbrisana!');
+		if($this->delete(Service::find($id)))
+			return Redirect::to('admin/services')->with('success', 'Podatko so bili izbrisani!');
+		return Redirect::to('/admin/services')->with('error', 'Zahtevana storitev ne obstaja!');
 	}
 
 	public function postSave()
 	{
-		// Validate user input
-		$validator = Validator::make(
-		    Input::all(),
-		    array(
-		        'name' => 'required',
-		        'price' => 'required',
-		        'time' => 'required'
-		    )
-		);
+		$fields = array('name' => 'required', 'price' => 'required', 'time' => 'required');
 
-		if ($validator->fails())
-			return Redirect::to('admin/services/add')->with('error', 'Validation error!');
-		else
-		{
-			// Process user input
-			$time = Input::get('time');
-			$time = explode(':', $time)[0]*60*60 + explode(':', $time)[1]*60;
+		// Extreme case where input value has to be modified (in this case, time)
+		$input = Input::only(array_keys($fields));
+		$input['time'] = explode(':', $input['time'])[0]*60*60 + explode(':', $input['time'])[1]*60;
 
-			if(!Input::has('id'))
-			{
-				$service = new Service;
-				$service->name = Input::get('name');
-				$service->price = Input::get('price');
-				$service->time = $time;
-				$service->save();
+		if($this->save(new Service, $input, $fields))
+			return Redirect::to('admin/services')->with('success', 'Storitev je bila dodana v sistem!');
+		return Redirect::to('admin/services')->with('error', 'Prišlo je do napake pri shranjevanju!');
+	}
 
-				return Redirect::to('admin/services')->with('success', 'Storitev je bila dodana v sistem!');
-			}
-			else
-			{
-				$service = Service::find(Input::get('id'));
-				if($service == null)
-					return Redirect::to('admin/services')->with('error', 'Zahtevana storitev ne obstaja!');
+	public function postUpdate()
+	{
+		$fields = array('name' => 'required', 'price' => 'required', 'time' => 'required');
 
-				$service->name = Input::get('name');
-				$service->price = Input::get('price');
-				$service->time = $time;
-				$service->save();
+		// Extreme case where input value has to be modified (in this case, time)
+		$input = Input::only(array_keys($fields));
+		$input['time'] = explode(':', $input['time'])[0]*60*60 + explode(':', $input['time'])[1]*60;
 
-				return Redirect::to('admin/services')->with('success', 'Storetev uspešno shranjena!');
-			}
-		}
+		if($this->save(Service::findOrFail(Input::get('id')), $input, $fields))
+			return Redirect::to('admin/services')->with('success', 'Storitev shranjena!');
+		return Redirect::to('admin/services')->with('error', 'Prišlo je do napake pri shranjevanju!');
 	}
 }
 
