@@ -2,7 +2,7 @@
 
 @section('content')
 	<div class="container">
-		<table class="table-calendar" style="background-color: white;">
+		<table class="table-calendar noselect" style="background-color: white;">
 			<thead>
 				<tr>
 					<th>Pon</th>
@@ -16,8 +16,8 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td><div class="green">1</div></td>
-					<td><div class="violet">2</div></td>
+					<td><div>1</div></td>
+					<td><div>2</div></td>
 					<td><div>3</div></td>
 					<td><div>4</div></td>
 					<td><div>5</div></td>
