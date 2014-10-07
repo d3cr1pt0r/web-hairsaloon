@@ -8,46 +8,35 @@ $(document).ready(function() {
 		var startIndex;
 		var endIndex;
 
+		function makeSelection(start, end, element) {
+			$(element).each(function(index, element) {
+				if(index >= startIndex && index <= endIndex) {
+					$(element).addClass('selected');
+				}
+				else {
+					$(element).removeClass('selected');
+				}
+			});
+		}
+
 		$('.table-calendar div').mousedown(function() {
 			isSelecting = true;
-			// Get selected div index
 			startIndex = $('.table-calendar div').index($(this));
 		});
 		$('.table-calendar div').mouseup(function() {
-			// Get selected div index
 			endIndex = $('.table-calendar div').index($(this));
 
-			// Mark all elements that match the index range as selected
-			if(isSelecting) {
-				$('.table-calendar div').each(function(index, element) {
-					if(index >= startIndex && index <= endIndex) {
-						$(element).addClass('selected');
-						console.log(index);
-					}
-					else {
-						$(element).removeClass('selected');
-					}
-				});
-			}
+			if(isSelecting)
+				makeSelection(startIndex, endIndex, '.table-calendar div');
 
 			isSelecting = false;
+			$('#schedule-modal').modal();
 		});
 		$('.table-calendar div').mouseenter(function() {
-			// Get selected div index
 			endIndex = $('.table-calendar div').index($(this));
 
-			// Mark all elements that match the index range as selected
-			if(isSelecting) {
-				$('.table-calendar div').each(function(index, element) {
-					if(index >= startIndex && index <= endIndex) {
-						$(element).addClass('selected');
-						console.log(index);
-					}
-					else {
-						$(element).removeClass('selected');
-					}
-				});
-			}
+			if(isSelecting)
+				makeSelection(startIndex, endIndex, '.table-calendar div');
 		})
 
 		// Deselect everything if clicked outside of the table
