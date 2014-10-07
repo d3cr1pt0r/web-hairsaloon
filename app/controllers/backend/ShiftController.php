@@ -39,51 +39,30 @@ class ShiftController extends BaseAdminController
 
 	public function postSave()
 	{
-		// Validate user input
-		$validator = Validator::make(
-		    Input::all(),
-		    array(
-		        'name' => 'required',
-		        'from' => 'required',
-		        'to' => 'required',
-		        'color' => 'required'
-		    )
-		);
+		$fields = array('name' => 'required', 'from' => 'required', 'to' => 'required', 'color' => 'required');
 
-		if ($validator->fails())
-			return Redirect::to('admin/services/add')->with('error', 'Validation error!');
-		else
-		{
-			$from = explode(':', Input::get('from'))[0]*60*60 + explode(':', Input::get('from'))[1]*60;
-			$to = explode(':', Input::get('to'))[0]*60*60 + explode(':', Input::get('to'))[1]*60;
+		// Extreme case where input value has to be modified (in this case, from and to)
+		$input = Input::only(array_keys($fields));
+		$input['from'] = explode(':', $input['from'])[0]*60*60 + explode(':', $input['from'])[1]*60;
+		$input['to'] = explode(':', $input['to'])[0]*60*60 + explode(':', $input['to'])[1]*60;
 
-			if(!Input::has('id'))
-			{
-				$shift = new Shift;
-				$shift->name = Input::get('name');
-				$shift->from = $from;
-				$shift->to = $to;
-				$shift->color = Input::get('color');
+		if($this->save(new Shift, $input, $fields))
+			return Redirect::to('admin/shifts')->with('success', 'Izmena je bila dodana v sistem!');
+		return Redirect::to('admin/shifts')->with('error', 'Prišlo je do napake pri shranjevanju!');
+	}
 
-				$shift->save();
+	public function postUpdate()
+	{
+		$fields = array('name' => 'required', 'from' => 'required', 'to' => 'required', 'color' => 'required');
 
-				return Redirect::to('admin/shifts')->with('success', 'Izmena je bila dodana v sistem!');
-			}
-			else
-			{
-				$shift = Shift::find(Input::get('id'));
-				if($shift == null)
-					return Redirect::to('admin/shifts')->with('error', 'Zahtevana izmena ne obstaja!');
+		// Extreme case where input value has to be modified (in this case, from and to)
+		$input = Input::only(array_keys($fields));
+		$input['from'] = explode(':', $input['from'])[0]*60*60 + explode(':', $input['from'])[1]*60;
+		$input['to'] = explode(':', $input['to'])[0]*60*60 + explode(':', $input['to'])[1]*60;
 
-				$shift->name = Input::get('name');
-				$shift->from = $from;
-				$shift->to = $to;
-				$shift->color = Input::get('color');
-				$shift->save();
-
-				return Redirect::to('admin/shifts')->with('success', 'Izmena uspešno shranjena!');
-			}
-		}
+		if($this->save(Shift::findOrFail(Input::get('id')), $input, $fields))
+			return Redirect::to('admin/shifts')->with('success', 'Izmena shranjena!');
+		return Redirect::to('admin/shifts')->with('error', 'Prišlo je do napake pri shranjevanju!');
 	}
 
 	public function getEdit($id)

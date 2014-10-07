@@ -2,7 +2,11 @@
 
 @section('content')
 	<div class="container">
+		@if(isset($shift))
+		{{ Form::open(array('url' => 'admin/'.$controller.'/update', 'method' => 'post')) }}
+		@else
 		{{ Form::open(array('url' => 'admin/'.$controller.'/save', 'method' => 'post')) }}
+		@endif
 			<div class="panel panel-default">
 				<div class="panel-heading">Dodaj izmeno</div>
 				<div class="panel-body">

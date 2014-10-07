@@ -21,4 +21,27 @@ class BaseAdminController extends Controller
 	public function filterData($table, $data = array()) {
 		return QueryHelper::andWhere($table,$data);
 	}
+
+	public function save($model, $input, $fields)
+	{
+		$validator = Validator::make(Input::only(array_keys($fields)), $fields);
+
+		if($validator->fails())
+			return false;
+
+		foreach($input as $key=>$value)
+			$model->$key = $value;
+		
+		$model->save();
+		return true;
+	}
+
+	public function delete($model)
+	{
+		if($model == null)
+			return false;
+
+		$service->delete();
+		return true;
+	}
 }
