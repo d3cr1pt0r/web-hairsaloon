@@ -3,7 +3,7 @@
 @section('content')
 	<div class="row well well-sm">
 	<h2 style="float: left;">{{ $title }}</h2>
-	<a style="float: right; margin: 20px; margin-left: 5px;" href="{{ '/admin/'.$controller.'/add' }}">
+	<a style="float: right; margin: 20px; margin-left: 5px;" href="/admin/{{ $controller }}/add/{{ $access_type or '' }}">
 		<button type="button" class="btn btn-primary btn-sm">Dodaj</button>
 	</a>
 	@if(isset($filters))
@@ -13,7 +13,7 @@
 </div>
 @if(isset($filters))
 	<div class="row well filters">
-		<form role="form" action="/admin/{{ $controller }}" method="post">
+		<form role="form" action="/admin/{{ $controller }}/{{ $access_type or '' }}" method="post">
 			<div class="row">
 				@foreach($filters as $filter)
 					<div class="form-group col-md-3">
@@ -64,11 +64,8 @@
 	    				@endif
 	    			@endforeach
 	    			<td align="right">
-	    				<a href="/admin/{{ $controller }}/edit/{{ $d->id }}">
+	    				<a href="/admin/{{ $controller }}/edit/{{ (isset($access_type) ? $access_type . '/':'') }}{{ $d->id }}">
 	    					<button type="button" class="btn btn-default btn-sm">Uredi</button>
-	    				</a>
-	    				<a href="/admin/{{ $controller }}/duplicate/{{ $d->id }}">
-	    					<button type="button" class="btn btn-default btn-sm">Kopiraj</button>
 	    				</a>
 	    				<a href="/admin/{{ $controller }}/delete/{{ $d->id }}" onclick="return confirm('Ali res želite izbrisati vsebino?');">
 	    					<button type="button" class="btn btn-danger btn-sm">Izbriši</button>

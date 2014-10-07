@@ -12,6 +12,9 @@
 */
 
 #Route::controller('/', 'HomeController');
+Route::get('admin/users/{id}', ['uses' => 'UserController@getIndex'])->where('id', '[0-9]+');
+Route::post('admin/users/{id}', ['uses' => 'UserController@postIndex'])->where('id', '[0-9]+');
+
 Route::controller('admin/shifts', 'ShiftController');
 Route::controller('admin/schedules', 'ScheduleController');
 Route::controller('admin/services', 'ServiceController');

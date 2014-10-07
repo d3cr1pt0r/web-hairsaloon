@@ -19,37 +19,69 @@ class UserController extends BaseAdminController
 							array("db" => "email", "header" => 'Email', 'type' => "mail_url"),
 							array("db" => "active", "header" => 'Aktiven', "type" => "checkbox"));
 
-	public function getIndex()
-	{
-		$view = View::make('backend.table');
-		$view->title = "Users";
-		$view->controller = $this->controller;
-		$view->table = "users";
-
-		// Data		
-		$users = User::all();
-
-		$view->filters = $this->filters;
-		$view->headers = $this->headers;
-		$view->data = $users;
-		return $this->render($view);
-	}
-
-	public function postIndex()
+	public function getIndex($access_type = 1)
 	{
 		$view = View::make('backend.table');
 		$view->title = "Uporabniki";
 		$view->controller = $this->controller;
 		$view->table = "users";
 
-		$data = array();
+		switch($access_type) {
+			case 1:
+				$view->title .= " - super administratorji";
+				break;
+			case 2:
+				$view->title .= " - administratorji";
+				break;
+			case 3:
+				$view->title .= " - frizerji";
+				break;
+			case 5:
+				$view->title .= " - stranke";
+				break;
+		}
+
+		// Data
+		$data["access_type"] = $access_type;	
+		$users = $this->filterData($this->table, $data);
+
+		$view->access_type = $access_type;
+		$view->filters = $this->filters;
+		$view->headers = $this->headers;
+		$view->data = $users;
+		return $this->render($view);
+	}
+
+	public function postIndex($access_type = 1)
+	{
+		$view = View::make('backend.table');
+		$view->title = "Uporabniki";
+		$view->controller = $this->controller;
+		$view->table = "users";
+
+		switch($access_type) {
+			case 1:
+				$view->title .= " - super administratorji";
+				break;
+			case 2:
+				$view->title .= " - administratorji";
+				break;
+			case 3:
+				$view->title .= " - frizerji";
+				break;
+			case 5:
+				$view->title .= " - stranke";
+				break;
+		}
+
+		$data["access_type"] = $access_type;
 		foreach(Input::all() as $key=>$val) 
 			if(!empty($val)) 
 				$data[$key] = $val;
 
 		$users = $this->filterData($this->table, $data);
 
-
+		$view->access_type = $access_type;
 		$view->filters = $this->filters;
 		$view->headers = $this->headers;
 		$view->data = $users;
@@ -57,17 +89,33 @@ class UserController extends BaseAdminController
 		return $this->render($view);
 	}
 
-	public function getAdd() 
+	public function getAdd($access_type = 1) 
 	{
 		$view = View::make('backend.users.edit');
 		$view->title = "Dodaj uporabnika";
 		$view->controller = $this->controller;
 		$view->add = true;
+		$view->access_type = $access_type;
+
+		switch($access_type) {
+			case 1:
+				$view->title .= " - super administrator";
+				break;
+			case 2:
+				$view->title .= " - administrator";
+				break;
+			case 3:
+				$view->title .= " - frizer";
+				break;
+			case 5:
+				$view->title .= " - stranka";
+				break;
+		}
 
 		return $this->render($view);
 	}
 
-	public function getEdit($id)
+	public function getEdit($access_type = 1, $id)
 	{
 		$user = User::find($id);
 		if($user == null)
@@ -78,6 +126,22 @@ class UserController extends BaseAdminController
 		$view->title = "Uredi uporabnika";
 		$view->controller = $this->controller;
 		$view->add = false;
+		$view->access_type = $access_type;
+
+		switch($access_type) {
+			case 1:
+				$view->title .= " - super administrator";
+				break;
+			case 2:
+				$view->title .= " - administrator";
+				break;
+			case 3:
+				$view->title .= " - frizer";
+				break;
+			case 5:
+				$view->title .= " - stranka";
+				break;
+		}
 
 		return $this->render($view);
 	}
@@ -112,18 +176,18 @@ class UserController extends BaseAdminController
 					if($user->save()) 
 					{
 						$id = $user->id;
-						return Redirect::to('/admin/users')->with('success', 'Podatki shranjeni!');
+						return Redirect::to('/admin/users/'.$user->access_type)->with('success', 'Podatki shranjeni!');
 					}
 					else 
 					{
-						return Redirect::to('/admin/users')->with('error', 'Gesli se ne ujemata!');
+						return Redirect::to('/admin/users/add/'.$user->access_type)->with('error', 'Gesli se ne ujemata!');
 					}
 				}
 			}
 			else if($user->save()) 
 			{
 				$id = $user->id;
-				return Redirect::to('/admin/users')->with('success', 'Podatki shranjeni!');
+				return Redirect::to('/admin/users/'.$user->access_type)->with('success', 'Podatki shranjeni!');
 			}
 		}
 		else {
@@ -142,7 +206,7 @@ class UserController extends BaseAdminController
 				if($user->save()) 
 				{
 					$id = $user->id;
-					return Redirect::to('/admin/users')->with('success', 'Uporabnik dodan!');
+					return Redirect::to('/admin/users/'.$user->access_type)->with('success', 'Uporabnik dodan!');
 				}
 			}
 		}

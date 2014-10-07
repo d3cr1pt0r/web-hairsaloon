@@ -8,15 +8,7 @@
 				
 				<input style="float: right; margin: 20px;" type="submit" class="btn btn-primary btn-sm" value="Shrani">
 			</div>
-			<div class="col-md-4">
-				<label>Vloga</label><br />
-				<select class="form-control" name="access_type">
-					<option value=1 {{ ((isset($user)) ? (($user->access_type==1) ? 'selected':'') : '') }}>Super Admin</option>
-					<option value=2 {{ ((isset($user)) ? (($user->access_type==2) ? 'selected':'') : '') }}>Admin</option>
-					<option value=3 {{ ((isset($user)) ? (($user->access_type==3) ? 'selected':'') : '') }}>Frizer</option>
-					<option value=5 {{ ((isset($user)) ? (($user->access_type==5) ? 'selected':'') : '') }}>Stranka</option>
-				</select>
-			</div>
+			<input type="hidden" name="access_type" value="{{ $access_type }}" />
 			<div class="col-md-4">
 				<label>Email</label><br />
 				<input class="form-control" type="email" name="email" value="{{ $user->email or '' }}" required /><br />
