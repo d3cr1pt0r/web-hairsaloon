@@ -15,43 +15,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><div>1</div></td>
-					<td><div>2</div></td>
-					<td><div>3</div></td>
-					<td><div>4</div></td>
-					<td><div>5</div></td>
-					<td><div>6</div></td>
-					<td><div>7</div></td>
-				</tr>
-				<tr>
-					<td><div>1</div></td>
-					<td><div>2</div></td>
-					<td><div>3</div></td>
-					<td><div>4</div></td>
-					<td><div>5</div></td>
-					<td><div>6</div></td>
-					<td><div>7</div></td>
-				</tr>
-				<tr>
-					<td><div>1</div></td>
-					<td><div>2</div></td>
-					<td><div>3</div></td>
-					<td><div>4</div></td>
-					<td><div>5</div></td>
-					<td><div>6</div></td>
-					<td><div>7</div></td>
-				</tr>
-				<tr>
-					<td><div>1</div></td>
-					<td><div>2</div></td>
-					<td><div>3</div></td>
-					<td><div>4</div></td>
-					<td><div>5</div></td>
-					<td><div>6</div></td>
-					<td><div>7</div></td>
-				</tr>
-
+				@foreach($calendar as $key=>$val)
+					<tr>
+					@foreach($val as $day)
+						@if($day == 0)
+							<td><div></div></td>
+						@else
+							<td><div>{{ $day['mday'] }}</div></td>
+						@endif
+					@endforeach
+					</tr>
+				@endforeach
 			</tbody>
 		</table>
 
@@ -84,4 +58,52 @@
 		</div><!-- /.modal -->
 
 	</div>
+
+	<script>
+		var isSelecting = false;
+		var startIndex;
+		var endIndex;
+
+		function makeSelection(start, end, element) {
+			$(element).each(function(index, element) {
+				if(index >= startIndex && index <= endIndex) {
+					$(element).addClass('selected');
+				}
+				else {
+					$(element).removeClass('selected');
+				}
+			});
+		}
+
+		$('.table-calendar div').mousedown(function() {
+			isSelecting = true;
+			startIndex = $('.table-calendar div').index($(this));
+		});
+		$('.table-calendar div').mouseup(function() {
+			endIndex = $('.table-calendar div').index($(this));
+
+			if(isSelecting)
+				makeSelection(startIndex, endIndex, '.table-calendar div');
+
+			isSelecting = false;
+			$('#schedule-modal').modal();
+		});
+		$('.table-calendar div').mouseenter(function() {
+			endIndex = $('.table-calendar div').index($(this));
+
+			if(isSelecting)
+				makeSelection(startIndex, endIndex, '.table-calendar div');
+		})
+
+		// Deselect everything if clicked outside of the table
+		$(document).mouseup(function(e) {
+			var element = $('.table-calendar');
+
+			if(!element.is(e.target) && element.has(e.target).length === 0) {
+				$('.table-calendar div').each(function(index, element) {
+					$(element).removeClass('selected');
+				});
+			}
+		});
+	</script>
 @stop

@@ -8,6 +8,7 @@ class ScheduleController extends BaseAdminController
 	{
 		$view = View::make('backend.schedules.view');
 		$view->title = $this->title;
+		$view->calendar = CalendarHelper::getCalendar();
 
 		$schedules = Schedule::all();
 
