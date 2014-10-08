@@ -13,7 +13,7 @@
 </div>
 @if(isset($filters))
 	<div class="row well filters">
-		<form role="form" action="/admin/{{ $controller }}/{{ $access_type or '' }}" method="post">
+		<form role="form" action="/admin/{{ $controller }}{{ (isset($access_type) ? '/'. $access_type:'') }}" method="post">
 			<div class="row">
 				@foreach($filters as $filter)
 					<div class="form-group col-md-3">

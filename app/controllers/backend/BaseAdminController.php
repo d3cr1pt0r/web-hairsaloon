@@ -33,7 +33,7 @@ class BaseAdminController extends Controller
 			$model->$key = $value;
 		
 		$model->save();
-		return true;
+		return $model->id;
 	}
 
 	public function delete($model)

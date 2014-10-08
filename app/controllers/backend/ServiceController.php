@@ -61,6 +61,7 @@ class ServiceController extends BaseAdminController
 		$view = View::make('backend.services.edit');
 		$view->title = $this->title;
 		$view->controller = $this->controller;
+		$view->time_periods = array();
 
 		return $this->render($view);
 	}
@@ -78,6 +79,7 @@ class ServiceController extends BaseAdminController
 		$view->service = $service;
 		$view->title = $this->title;
 		$view->controller = $this->controller;
+		$view->time_periods = $service->timePeriods;
 
 		return $this->render($view);
 	}
@@ -91,27 +93,59 @@ class ServiceController extends BaseAdminController
 
 	public function postSave()
 	{
-		$fields = array('name' => 'required', 'price' => 'required', 'time' => 'required');
+		$fields = array('name' => 'required', 'price' => 'required');
+		$fields_intervals = array('desc' => '', 'time' => 'required', 'active_time' => '');
 
 		// Extreme case where input value has to be modified (in this case, time)
 		$input = Input::only(array_keys($fields));
-		$input['time'] = explode(':', $input['time'])[0]*60*60 + explode(':', $input['time'])[1]*60;
 
-		if($this->save(new Service, $input, $fields))
-			return Redirect::to('admin/services')->with('success', 'Storitev je bila dodana v sistem!');
+		$input_intervals = Input::only(array_keys($fields_intervals));
+
+		if($service_id = $this->save(new Service, $input, $fields)) 
+		{
+			$ids = Input::get('interval-id');
+			$descs = Input::get('desc');
+			$times = Input::get('time');
+			$actives = Input::get("active_time");
+
+			foreach($times as $key => $val) {
+				$val= explode(':', $val)[0]*60*60 + explode(':', $val)[1]*60;
+				if(isset($ids[$key]))
+					$this->save(TimePeriod::findOrFail($ids[$key]), array("service_id" => $service_id, "desc" => $descs[$key], "time" => $val, "active_time" => $actives[$key]), $fields_intervals);
+				else
+					$this->save(new TimePeriod, array("service_id" => $service_id,  "desc" => $descs[$key], "time" => $val, "active_time" => $actives[$key]), $fields_intervals);
+			}
+			return Redirect::to('admin/services')->with('success', 'Storitev shranjena!');
+		}
 		return Redirect::to('admin/services')->with('error', 'Prišlo je do napake pri shranjevanju!');
 	}
 
 	public function postUpdate()
 	{
-		$fields = array('name' => 'required', 'price' => 'required', 'time' => 'required');
+		$fields = array('name' => 'required', 'price' => 'required');
+		$fields_intervals = array('time' => 'required', 'active_time' => '');
 
 		// Extreme case where input value has to be modified (in this case, time)
 		$input = Input::only(array_keys($fields));
-		$input['time'] = explode(':', $input['time'])[0]*60*60 + explode(':', $input['time'])[1]*60;
 
-		if($this->save(Service::findOrFail(Input::get('id')), $input, $fields))
+		$input_intervals = Input::only(array_keys($fields_intervals));
+
+		if($this->save(Service::findOrFail(Input::get('id')), $input, $fields)) 
+		{
+			$ids = Input::get('interval-id');
+			$descs = Input::get('desc');
+			$times = Input::get('time');
+			$actives = Input::get("active_time");
+
+			foreach($times as $key => $val) {
+				$val= explode(':', $val)[0]*60*60 + explode(':', $val)[1]*60;
+				if(isset($ids[$key]))
+					$this->save(TimePeriod::findOrFail($ids[$key]), array("service_id" => Input::get('id'), "desc" => $descs[$key], "time" => $val, "active_time" => $actives[$key]), $fields_intervals);
+				else
+					$this->save(new TimePeriod, array("service_id" => Input::get('id'), "desc" => $descs[$key], "time" => $val, "active_time" => $actives[$key]), $fields_intervals);
+			}
 			return Redirect::to('admin/services')->with('success', 'Storitev shranjena!');
+		}
 		return Redirect::to('admin/services')->with('error', 'Prišlo je do napake pri shranjevanju!');
 	}
 }
