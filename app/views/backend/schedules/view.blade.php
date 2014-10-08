@@ -76,17 +76,21 @@
 		}
 
 		$('.table-calendar div').mousedown(function() {
-			isSelecting = true;
-			startIndex = $('.table-calendar div').index($(this));
+			if(event.which == 1) {
+				isSelecting = true;
+				startIndex = $('.table-calendar div').index($(this));
+			}
 		});
-		$('.table-calendar div').mouseup(function() {
-			endIndex = $('.table-calendar div').index($(this));
+		$('.table-calendar div').mouseup(function(event) {
+			if(event.which == 1) {
+				endIndex = $('.table-calendar div').index($(this));
 
-			if(isSelecting)
-				makeSelection(startIndex, endIndex, '.table-calendar div');
+				if(isSelecting)
+					makeSelection(startIndex, endIndex, '.table-calendar div');
 
-			isSelecting = false;
-			$('#schedule-modal').modal();
+				isSelecting = false;
+				$('#schedule-modal').modal();
+			}
 		});
 		$('.table-calendar div').mouseenter(function() {
 			endIndex = $('.table-calendar div').index($(this));
@@ -97,12 +101,15 @@
 
 		// Deselect everything if clicked outside of the table
 		$(document).mouseup(function(e) {
-			var element = $('.table-calendar');
+			if(event.which == 1) {
+				var element = $('.table-calendar');
 
-			if(!element.is(e.target) && element.has(e.target).length === 0) {
-				$('.table-calendar div').each(function(index, element) {
-					$(element).removeClass('selected');
-				});
+				if(!element.is(e.target) && element.has(e.target).length === 0) {
+					$('.table-calendar div').each(function(index, element) {
+						$(element).removeClass('selected');
+					});
+					isSelecting = false;
+				}
 			}
 		});
 	</script>
