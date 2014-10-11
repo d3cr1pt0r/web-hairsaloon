@@ -18,7 +18,13 @@
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li>{{ HTML::link('', 'Hairsaloon page') }}</li>
-			<li>{{ HTML::link('admin/logout', 'Logout') }}</li>
+			<li class="dropdown">
+        		<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <b class="caret"></b></a>
+        		<ul class="dropdown-menu">
+		          <li>{{ HTML::link('admin/profile', 'Vaš profil') }}</li>
+		          <li>{{ HTML::link('admin/logout', 'Odjava') }}</li>
+		        </ul>
+      		</li>
 		</ul>
 	</div>
 </nav>
