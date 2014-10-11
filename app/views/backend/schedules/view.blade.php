@@ -79,7 +79,7 @@
 			formatter: function(value) {
 				if(value.length != undefined)
 				{
-					console.log($(this).parent());
+					console.log($(this));
 					var from = [Math.floor(value[0] / 60 / 60).toString(), (((value[0] / 60 / 60) - Math.floor(value[0] / 60 / 60)) * 60).toString()];
 					var to = [Math.floor(value[1] / 60 / 60).toString(), (((value[1] / 60 / 60) - Math.floor(value[1] / 60 / 60)) * 60).toString()];
 
@@ -94,13 +94,7 @@
 		});
 
 		$(".tooltip-main .tooltip-inner").bind("DOMSubtreeModified", function() {
-			//console.log($(this).parent().find('input').slider('getValue'));
-
-			var values = $(this).html().trim().split(":");
-			var from = [Math.floor(values[0] / 60 / 60), ((values[0] / 60 / 60) - Math.floor(values[0] / 60 / 60)) * 60];
-			var to = [Math.floor(values[1] / 60 / 60), ((values[1] / 60 / 60) - Math.floor(values[1] / 60 / 60)) * 60];
-			//console.log(from[0].toString() + ':' + from[1].toString());
-			//$(this).html(from[0].toString() + ':' + from[1].toString() + ' - ' + to[0].toString() + ':' + to[1].toString());
+			
 		});
 
 		var isSelecting = false;
