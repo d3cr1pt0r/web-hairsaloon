@@ -11,8 +11,25 @@ class ScheduleController extends BaseAdminController
 		$view->calendar = CalendarHelper::getCalendar();
 
 		$schedules = Schedule::all();
+		$users = User::where('access_type', '>', '1')->where('access_type', '<', '4')->get();
+		$shifts = Shift::all();
 
 		$view->schedules = $schedules;
+		$view->shifts = $shifts;
+		$view->users = $users;
+
+		foreach($shifts as $shift)
+		{
+			$from = $shift->from;
+			$to = $shift->to;
+			$range = $to - $from;
+
+			$shift->from_str = date('H:i', $from);
+			$shift->to_str = date('H:i', $to);
+			$shift->range = $range;
+			$shift->range_str = date('H:i', $range);
+		}
+
 		return $this->render($view);
 	}
 

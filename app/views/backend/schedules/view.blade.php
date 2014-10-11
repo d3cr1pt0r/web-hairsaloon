@@ -38,16 +38,31 @@
 						<h4 class="modal-title">Zapolni urnik</h4>
 					</div>
 					<div class="modal-body">
-						<p><strong>Izberi frizerje</strong></p>
-						<button type="button" class="btn btn-default btn-sm" data-toggle="button">Klemen Brajkovič</button>
-						<button type="button" class="btn btn-default btn-sm" data-toggle="button">Tomaž Silič</button>
-						<button type="button" class="btn btn-default btn-sm" data-toggle="button">Eva Kaštrun</button>
-						<button type="button" class="btn btn-default btn-sm" data-toggle="button">Jordana Suljanovič</button>
-
-						<br><br>
-						<p><strong>Izberi izmeno</strong></p>
-						<button type="button" class="btn btn-default btn-sm" data-toggle="button">Dopoldan</button>
-						<button type="button" class="btn btn-default btn-sm" data-toggle="button">Popoldan</button>
+						<div class="panel-group" id="accordion">
+							@foreach($users as $user)
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ $user->id }}" style="font-size: 14px;">
+												{{ $user->name." ".$user->lastname }}
+											</a>
+										</h4>
+									</div>
+									<div id="collapse-{{ $user->id }}" class="panel-collapse collapse">
+										<div class="panel-body">
+											@foreach($shifts as $shift)
+												<h4>{{ $shift->name }}</h4>
+												<div style="float: left;">{{ date('H:i', $shift->from) }}</div>
+												<div style="float: right;">{{ date('H:i', $shift->to) }}</div>
+												<div class="selected-range" style="float: right; margin-right: 42%;"></div>
+												<input id="ex2" type="text" class="span2 my-slider" value="" data-slider-min="{{ $shift->from }}" data-slider-max="{{ $shift->to }}" data-slider-step="900" data-slider-value="[{{ $shift->from }},{{ $shift->to }}]"/>
+											@endforeach
+											<p></p>
+										</div>
+									</div>
+								</div>
+							@endforeach
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -60,6 +75,34 @@
 	</div>
 
 	<script>
+		$(".my-slider").slider({
+			formatter: function(value) {
+				if(value.length != undefined)
+				{
+					console.log($(this).parent());
+					var from = [Math.floor(value[0] / 60 / 60).toString(), (((value[0] / 60 / 60) - Math.floor(value[0] / 60 / 60)) * 60).toString()];
+					var to = [Math.floor(value[1] / 60 / 60).toString(), (((value[1] / 60 / 60) - Math.floor(value[1] / 60 / 60)) * 60).toString()];
+
+					if(from[0].length == 1) from[0] = "0" + from[0];
+					if(from[1].length == 1) from[1] = "0" + from[1];
+					if(to[0].length == 1) to[0] = "0" + to[0];
+					if(to[1].length == 1) to[1] = "0" + to[1];
+
+					return from[0] + ':' + from[1] + ' - ' + to[0] + ':' + to[1];
+				}
+			}
+		});
+
+		$(".tooltip-main .tooltip-inner").bind("DOMSubtreeModified", function() {
+			//console.log($(this).parent().find('input').slider('getValue'));
+
+			var values = $(this).html().trim().split(":");
+			var from = [Math.floor(values[0] / 60 / 60), ((values[0] / 60 / 60) - Math.floor(values[0] / 60 / 60)) * 60];
+			var to = [Math.floor(values[1] / 60 / 60), ((values[1] / 60 / 60) - Math.floor(values[1] / 60 / 60)) * 60];
+			//console.log(from[0].toString() + ':' + from[1].toString());
+			//$(this).html(from[0].toString() + ':' + from[1].toString() + ' - ' + to[0].toString() + ':' + to[1].toString());
+		});
+
 		var isSelecting = false;
 		var startIndex;
 		var endIndex;
