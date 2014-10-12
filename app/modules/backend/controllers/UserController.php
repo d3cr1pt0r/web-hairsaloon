@@ -171,7 +171,9 @@ class UserController extends BaseAdminController
 			$user->phone = Input::get("phone");
 			$user->birthdate = Input::get("birthdate");
 
-			if(!empty(Input::get("password"))) 
+			$password = Input::get("password");
+
+			if(!empty($password)) 
 			{
 				$user->password = sha1(Input::get("password"));
 				$check_password = sha1(Input::get("check_password"));
