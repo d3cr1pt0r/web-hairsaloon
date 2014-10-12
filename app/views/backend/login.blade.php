@@ -13,6 +13,12 @@
 					<label for="exampleInputPassword1">Password</label>
 					<input type="password" class="form-control" name="password" placeholder="Password">
 				</div>
+
+				<div>
+					{{ HTML::image(Captcha::img(), 'Captcha image') }}
+		       		{{ Form::text('captcha') }}<br /><br />
+		   		 </div>
+
 				<button type="submit" class="btn btn-default">Submit</button>
 			{{ Form::close() }}
 		</div>

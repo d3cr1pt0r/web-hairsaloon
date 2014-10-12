@@ -31,9 +31,30 @@ class ProfileController extends BaseAdminController
 						 'lastname' => 'required',
 						  'email' => 'required');
 
-		if(Input::get("password") == Input::get("check-password"))
+		if(Input::has("password")) 
+		{
+			if(Input::get("password") == Input::get("check-password"))
+			{
+				$input = Input::only($fields);
+				$input["password"] = sha1(Input::get("password"));
+				if($this->save(User::findOrFail(Auth::id()), $input, $fields_v))
+				{
+					return Redirect::to('admin/profile')->with('success', 'Podatki shranjeni!');
+				}
+				else
+				{
+					return Redirect::to('admin/profile')->with('error', 'Prišlo je do napake pri shranjevanju!');
+				}
+			}
+			else
+			{
+				return Redirect::to('admin/profile')->with('error', 'Gesli se ne ujemata!');
+			}
+		}
+		else
 		{
 			$input = Input::only($fields);
+			$input["password"] = sha1(Input::get("password"));
 			if($this->save(User::findOrFail(Auth::id()), $input, $fields_v))
 			{
 				return Redirect::to('admin/profile')->with('success', 'Podatki shranjeni!');
@@ -42,10 +63,6 @@ class ProfileController extends BaseAdminController
 			{
 				return Redirect::to('admin/profile')->with('error', 'Prišlo je do napake pri shranjevanju!');
 			}
-		}
-		else
-		{
-			return Redirect::to('admin/profile')->with('error', 'Gesli se ne ujemata!');
 		}
 	}
 }

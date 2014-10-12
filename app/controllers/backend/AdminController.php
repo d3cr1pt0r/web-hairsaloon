@@ -28,7 +28,8 @@ class AdminController extends BaseAdminController
 		    Input::all(),
 		    array(
 		        'email' => 'required|email',
-		        'password' => 'required'
+		        'password' => 'required',
+		        'captcha' => 'required|captcha'
 		    )
 		);
 
