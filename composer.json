@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
+		"creolab/laravel-modules": "dev-master",
 		"mews/captcha": "dev-master"
 	},
 	"autoload": {
@@ -13,7 +14,8 @@
 			"app/controllers",
 			"app/models",
 			"app/database/migrations",
-			"app/database/seeds"
+			"app/database/seeds",
+			"app/modules"
 		]
 	},
 	"scripts": {
