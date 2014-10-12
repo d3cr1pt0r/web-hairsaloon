@@ -15,14 +15,14 @@
 Route::filter('auth.admin', function(){
 	if(!Auth::check() || Auth::user()->access_type >= 5)
 	{
-		return Redirect::to('admin/login');
+		return Redirect::to('admin/auth/login');
 	}
 });
 
 Route::filter('auth.basic', function(){
 	if(!Auth::check())
 	{
-		return Redirect::to('login');
+		return Redirect::to('admin/auth/login');
 	}
 });
 
