@@ -2,26 +2,11 @@
 
 namespace App\Modules\Backend\Controllers;
 
-use View, User, Auth, Input, Redirect, TimePeriod, Service;
+use View, User, Auth, Input, Redirect, TimePeriod, Service, GenericHelper;
 
 class ServiceController extends BaseAdminController
 {
-	private $title = 'Storitve';
-	private $table = 'services';
-	private $controller = 'services';
-	private $filters = array(array("type" => "text",
-							       "name" => "name",
-							       "label" => "Ime storitve"),
-						 	 array("type" => "text",
-						           "name" => "price",
-							       "label" => "Cena storitve")
-						);
-
-	private $headers = array(array("db" => "name", "header" => 'Ime storitve', 'type' => "normal"),
-							array("db" => "price", "header" => 'Cena', 'type' => "price"),
-							array("db" => "time", "header" => 'Čas', 'type' => "timeperiod"),
-							array("db" => "active", "header" => 'Aktiven', 'type' => "checkbox")
-						);
+	protected $controller = 'services';
 
 	public function getIndex()
 	{
@@ -99,25 +84,19 @@ class ServiceController extends BaseAdminController
 	{
 		$fields = array('name' => 'required', 'price' => 'required');
 		$fields_intervals = array('desc' => '', 'time' => 'required', 'active_time' => '');
-
-		// Extreme case where input value has to be modified (in this case, time)
 		$input = Input::only(array_keys($fields));
 
-		$input_intervals = Input::only(array_keys($fields_intervals));
+		$service_id = $this->save(new Service, $input, $fields);
 
-		if($service_id = $this->save(new Service, $input, $fields)) 
+		if($service_id) 
 		{
-			$ids = Input::get('interval-id');
 			$descs = Input::get('desc');
 			$times = Input::get('time');
 			$actives = Input::get("active_time");
 
 			foreach($times as $key => $val) {
 				$val= explode(':', $val)[0]*60*60 + explode(':', $val)[1]*60;
-				if(isset($ids[$key]))
-					$this->save(TimePeriod::findOrFail($ids[$key]), array("service_id" => $service_id, "desc" => $descs[$key], "time" => $val, "active_time" => $actives[$key]), $fields_intervals);
-				else
-					$this->save(new TimePeriod, array("service_id" => $service_id,  "desc" => $descs[$key], "time" => $val, "active_time" => $actives[$key]), $fields_intervals);
+				$this->save(new TimePeriod, array("service_id" => $service_id,  "desc" => $descs[$key], "time" => $val, "active_time" => $actives[$key]), $fields_intervals);
 			}
 			return Redirect::to('admin/services')->with('success', 'Storitev shranjena!');
 		}
@@ -129,10 +108,7 @@ class ServiceController extends BaseAdminController
 		$fields = array('name' => 'required', 'price' => 'required');
 		$fields_intervals = array('time' => 'required', 'active_time' => '');
 
-		// Extreme case where input value has to be modified (in this case, time)
 		$input = Input::only(array_keys($fields));
-
-		$input_intervals = Input::only(array_keys($fields_intervals));
 
 		if($this->save(Service::findOrFail(Input::get('id')), $input, $fields)) 
 		{
