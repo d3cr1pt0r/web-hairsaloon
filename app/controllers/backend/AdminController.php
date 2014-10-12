@@ -30,27 +30,14 @@ class AdminController extends BaseAdminController
 	public function postLogin()
 	{		
 		// Validate user input
+		$fields = array(
+	        'email' => 'required|email',
+	        'password' => 'required'
+	    );
 		if(FailedLoginAttempts::where("ip", $_SERVER["REMOTE_ADDR"])->count() >= 3)
-		{
-			$validator = Validator::make(
-			    Input::all(),
-			    array(
-			        'email' => 'required|email',
-			        'password' => 'required',
-			        'captcha' => 'required|captcha'
-			    )
-			);
-		}
-		else 
-		{
-			$validator = Validator::make(
-			    Input::all(),
-			    array(
-			        'email' => 'required|email',
-			        'password' => 'required'
-			    )
-			);
-		}
+			$fields['captcha'] = 'required|captcha';
+		
+		$validator = Validator::make(Input::all(), $fields);
 
 		if ($validator->fails())
 			return Redirect::to('admin/login')->with('error', 'Validation error!');
