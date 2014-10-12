@@ -2,7 +2,7 @@
 
 namespace App\Modules\Backend\Controllers;
 
-use View, User, Auth, Shift, Input, Redirect, GenericHelper;
+use View, User, Auth, Shift, Input, Redirect;
 
 class ShiftController extends BaseAdminController
 {

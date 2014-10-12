@@ -2,7 +2,7 @@
 
 namespace App\Modules\Backend\Controllers;
 
-use View, User, Auth, Input, Redirect, TimePeriod, Service, GenericHelper;
+use View, User, Auth, Input, Redirect, TimePeriod, Service;
 
 class ServiceController extends BaseAdminController
 {

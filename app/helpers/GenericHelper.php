@@ -14,6 +14,16 @@ class GenericHelper
 				break;
 			case 'shifts':
 				$table = 'shifts';
+				break;
+			case 'schedules':
+				$table = 'schedules';
+				break;
+			case 'services':
+				$table = 'services';
+				break;
+			case 'profile':
+				$table = 'profile';
+				break;
 			default:
 				break;
 		}

@@ -56,7 +56,7 @@ class UserController extends BaseAdminController
 		$view->controller = $this->controller;
 		$view->add = true;
 		$view->access_type = $access_type;
-
+		
 		return $this->render($view);
 	}
 
