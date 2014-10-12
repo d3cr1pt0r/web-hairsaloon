@@ -14,10 +14,12 @@
 					<input type="password" class="form-control" name="password" placeholder="Password">
 				</div>
 
+				@if($captcha)
 				<div>
 					{{ HTML::image(Captcha::img(), 'Captcha image') }}
 		       		{{ Form::text('captcha') }}<br /><br />
 		   		 </div>
+		   		 @endif
 
 				<button type="submit" class="btn btn-default">Submit</button>
 			{{ Form::close() }}

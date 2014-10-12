@@ -17,6 +17,12 @@ class AdminController extends BaseAdminController
 		// Show login form
 		$view = View::make('backend.login');
 		$view->title = "Login";
+		$view->captcha = false;
+
+		if(FailedLoginAttempts::where("ip", $_SERVER["REMOTE_ADDR"])->count() >= 3)
+		{
+			$view->captcha = true;
+		}
 
 		return $this->render($view);
 	}
@@ -24,14 +30,27 @@ class AdminController extends BaseAdminController
 	public function postLogin()
 	{		
 		// Validate user input
-		$validator = Validator::make(
-		    Input::all(),
-		    array(
-		        'email' => 'required|email',
-		        'password' => 'required',
-		        'captcha' => 'required|captcha'
-		    )
-		);
+		if(FailedLoginAttempts::where("ip", $_SERVER["REMOTE_ADDR"])->count() >= 3)
+		{
+			$validator = Validator::make(
+			    Input::all(),
+			    array(
+			        'email' => 'required|email',
+			        'password' => 'required',
+			        'captcha' => 'required|captcha'
+			    )
+			);
+		}
+		else 
+		{
+			$validator = Validator::make(
+			    Input::all(),
+			    array(
+			        'email' => 'required|email',
+			        'password' => 'required'
+			    )
+			);
+		}
 
 		if ($validator->fails())
 			return Redirect::to('admin/login')->with('error', 'Validation error!');
@@ -39,9 +58,19 @@ class AdminController extends BaseAdminController
 		{
 			// Try to authenticate user
 			if(User::AuthenticateAdmin(Input::get('email'), Input::get('password')))
+			{
+				FailedLoginAttempts::where("ip", $_SERVER["REMOTE_ADDR"])->delete();
 				return Redirect::to('admin')->with('success', 'Login successful!');
+			}
 			else
+			{
+				$FailedAttempt = new FailedLoginAttempts;
+				$FailedAttempt->ip = $_SERVER["REMOTE_ADDR"];
+				$FailedAttempt->user_agent = $_SERVER["HTTP_USER_AGENT"];
+				$FailedAttempt->save();
+
 				return Redirect::to('admin/login')->with('error', 'Invalid credentials!');
+			}
 		}
 	}
 
