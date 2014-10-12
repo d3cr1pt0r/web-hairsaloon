@@ -15,7 +15,8 @@
 			"app/models",
 			"app/database/migrations",
 			"app/database/seeds",
-			"app/modules"
+			"app/modules",
+			"app/helpers"
 		]
 	},
 	"scripts": {

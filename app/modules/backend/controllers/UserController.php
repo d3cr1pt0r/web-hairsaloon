@@ -2,48 +2,18 @@
 
 namespace App\Modules\Backend\Controllers;
 
-use View, Input, Redirect, User;
+use View, Input, Redirect, User, GenericHelper;
 
 class UserController extends BaseAdminController
 {
-	private $table = 'users';
-	private $controller = 'users';
-	private $filters = array(array("type" => "text",
-							   "name" => "name",
-							   "label" => "Name"),
-						 array("type" => "text",
-							   "name" => "lastname",
-							   "label" => "Lastname"),
-						 array("type" => "text",
-							   "name" => "email",
-							   "label" => "Email"));
-
-	private $headers = array(array("db" => "name", "header" => 'Ime', 'type' => "normal"),
-							array("db" => "lastname", "header" => 'Priimek', 'type' => "normal"),
-							array("db" => "email", "header" => 'Email', 'type' => "mail_url"),
-							array("db" => "active", "header" => 'Aktiven', "type" => "checkbox"));
+	protected $controller = 'users';
 
 	public function getIndex($access_type = 1)
 	{
 		$view = View::make('backend::table');
-		$view->title = "Uporabniki";
+		$view->title = "Uporabniki - ".GenericHelper::getAccesTypeString($access_type);
 		$view->controller = $this->controller;
-		$view->table = "users";
-
-		switch($access_type) {
-			case 1:
-				$view->title .= " - super administratorji";
-				break;
-			case 2:
-				$view->title .= " - administratorji";
-				break;
-			case 3:
-				$view->title .= " - frizerji";
-				break;
-			case 5:
-				$view->title .= " - stranke";
-				break;
-		}
+		$view->table = $this->table;
 
 		// Data
 		$data["access_type"] = $access_type;	
@@ -53,30 +23,16 @@ class UserController extends BaseAdminController
 		$view->filters = $this->filters;
 		$view->headers = $this->headers;
 		$view->data = $users;
+
 		return $this->render($view);
 	}
 
 	public function postIndex($access_type = 1)
 	{
 		$view = View::make('backend::table');
-		$view->title = "Uporabniki";
+		$view->title = "Uporabniki - ".GenericHelper::getAccesTypeString($access_type);
 		$view->controller = $this->controller;
-		$view->table = "users";
-
-		switch($access_type) {
-			case 1:
-				$view->title .= " - super administratorji";
-				break;
-			case 2:
-				$view->title .= " - administratorji";
-				break;
-			case 3:
-				$view->title .= " - frizerji";
-				break;
-			case 5:
-				$view->title .= " - stranke";
-				break;
-		}
+		$view->table = $this->table;
 
 		$data["access_type"] = $access_type;
 		foreach(Input::all() as $key=>$val) 
@@ -96,26 +52,11 @@ class UserController extends BaseAdminController
 	public function getAdd($access_type = 1) 
 	{
 		$view = View::make('backend::users.edit');
-		$view->title = "Dodaj uporabnika";
+		$view->title = "Dodaj uporabnika - ".GenericHelper::getAccesTypeString($access_type);
 		$view->controller = $this->controller;
 		$view->add = true;
 		$view->access_type = $access_type;
-
-		switch($access_type) {
-			case 1:
-				$view->title .= " - super administrator";
-				break;
-			case 2:
-				$view->title .= " - administrator";
-				break;
-			case 3:
-				$view->title .= " - frizer";
-				break;
-			case 5:
-				$view->title .= " - stranka";
-				break;
-		}
-
+		
 		return $this->render($view);
 	}
 
@@ -127,25 +68,10 @@ class UserController extends BaseAdminController
 
 		$view = View::make('backend::users.edit');
 		$view->user = $user;
-		$view->title = "Uredi uporabnika";
+		$view->title = "Uredi uporabnika - ".GenericHelper::getAccesTypeString($access_type);
 		$view->controller = $this->controller;
 		$view->add = false;
 		$view->access_type = $access_type;
-
-		switch($access_type) {
-			case 1:
-				$view->title .= " - super administrator";
-				break;
-			case 2:
-				$view->title .= " - administrator";
-				break;
-			case 3:
-				$view->title .= " - frizer";
-				break;
-			case 5:
-				$view->title .= " - stranka";
-				break;
-		}
 
 		return $this->render($view);
 	}
@@ -162,60 +88,59 @@ class UserController extends BaseAdminController
 
 	public function postSave()
 	{
-		if(Input::has("id")) {
-			$user = User::find(Input::get("id"));
-			$user->access_type = Input::get("access_type");
-			$user->name = Input::get("name");
-			$user->lastname = Input::get("lastname");
-			$user->email = Input::get("email");
-			$user->phone = Input::get("phone");
-			$user->birthdate = Input::get("birthdate");
+		$fields = array(
+			'access_type' => 'required',
+			'name' => 'required',
+			'lastname' => 'required',
+			'email' => 'required',
+			'phone' => 'required',
+			'birthdate' => 'required',
+			'password' => 'required'
+		);
 
-			$password = Input::get("password");
+		$input = Input::only(array_keys($fields));
 
-			if(!empty($password)) 
-			{
-				$user->password = sha1(Input::get("password"));
-				$check_password = sha1(Input::get("check_password"));
-				if($user->password == $check_password) 
-				{
-					if($user->save()) 
-					{
-						$id = $user->id;
-						return Redirect::to('/admin/users/'.$user->access_type)->with('success', 'Podatki shranjeni!');
-					}
-					else 
-					{
-						return Redirect::to('/admin/users/add/'.$user->access_type)->with('error', 'Gesli se ne ujemata!');
-					}
-				}
-			}
-			else if($user->save()) 
-			{
-				$id = $user->id;
-				return Redirect::to('/admin/users/'.$user->access_type)->with('success', 'Podatki shranjeni!');
-			}
+		$password = Input::get("password");
+		$password_check = Input::get("check_password");
+
+		if($password == $password_check)
+		{
+			$input['password'] = sha1($input['password']);
+			if($this->save(new User, $input, $fields))
+				return Redirect::to('/admin/users/'.Input::get('access_type'))->with('success', 'Uporabnik dodan!');
+			return Redirect::to('/admin/users/add/'.Input::get('access_type'))->with('error', 'Prišlo je do napake pri shranjevanju!');
 		}
-		else {
-			$user = new User;
-			$user->access_type = Input::get("access_type");
-			$user->name = Input::get("name");
-			$user->lastname = Input::get("lastname");
-			$user->email = Input::get("email");
-			$user->phone = Input::get("phone");
-			$user->birthdate = Input::get("birthdate");
-			$user->password = sha1(Input::get("password"));
-			$check_password = sha1(Input::get("check_password"));
 
-			if($user->password == $check_password) 
-			{
-				if($user->save()) 
-				{
-					$id = $user->id;
-					return Redirect::to('/admin/users/'.$user->access_type)->with('success', 'Uporabnik dodan!');
-				}
-			}
+		return Redirect::to('/admin/users/add/'.Input::get('access_type'))->with('error', 'Gesli se ne ujemata!');
+	}
+
+	public function postUpdate()
+	{
+		$fields = array(
+			'access_type' => 'required',
+			'name' => 'required',
+			'lastname' => 'required',
+			'email' => 'required',
+			'phone' => 'required',
+			'birthdate' => 'required'
+		);
+		$password = Input::get("password");
+		$password_check = Input::get("check_password");
+
+		if(!empty($password))
+		{
+			if($password != $password_check)
+				return Redirect::to('/admin/users/add/'.Input::get('access_type'))->with('error', 'Gesli se ne ujemata!');
+
+			$fields['password'] = 'required';
 		}
+
+		$input = Input::only(array_keys($fields));
+		$input['password'] = sha1($input['password']);
+
+		if($this->save(User::findOrFail(Input::get('id')), $input, $fields))
+			return Redirect::to('/admin/users/'.Input::get('access_type'))->with('success', 'Uporabnik shranjen!');
+		return Redirect::to('/admin/users/add/'.Input::get('access_type'))->with('error', 'Prišlo je do napake pri shranjevanju!');
 	}
 }
 

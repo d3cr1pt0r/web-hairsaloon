@@ -6,9 +6,7 @@ use View, User, Auth, Input, Redirect;
 
 class ProfileController extends BaseAdminController
 {
-	private $table = 'users';
-	private $controller = 'profile';
-	private $title = 'Moj profil';
+	protected $controller = 'profile';
 
 	public function getIndex() 
 	{

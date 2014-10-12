@@ -6,7 +6,7 @@ use View, User, Auth, CalendarHelper, Schedule, Shift;
 
 class ScheduleController extends BaseAdminController
 {
-	private $title = 'Urniki';
+	protected $controller = 'schedules';
 
 	public function getIndex()
 	{

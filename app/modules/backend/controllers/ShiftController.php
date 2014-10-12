@@ -6,16 +6,7 @@ use View, User, Auth, Shift, Input, Redirect;
 
 class ShiftController extends BaseAdminController
 {
-	private $title = 'Izmene';
-	private $table = 'shifts';
-	private $controller = 'shifts';
-
-	private $headers = array(array("db" => "name", "header" => 'Ime izmene', 'type' => "normal"),
-							array("db" => "from", "header" => 'Od', 'type' => "time"),
-							array("db" => "to", "header" => 'Do', 'type' => "time"),
-							array("db" => "color", "header" => "Barva", "type" => "color"),
-							array("db" => "active", "header" => 'Aktiven', 'type' => "checkbox")
-						);
+	protected $controller = 'shifts';
 
 	public function getIndex()
 	{

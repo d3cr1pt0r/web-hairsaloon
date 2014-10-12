@@ -2,7 +2,7 @@
 
 namespace App\Modules\Backend\Controllers;
 
-use QueryHelper, Validator, Input;
+use QueryHelper, Validator, Input, GenericHelper;
 
 class BaseAdminController extends \Controller
 {
@@ -14,6 +14,11 @@ class BaseAdminController extends \Controller
 		$this->beforeFilter('csrf', array('only' => array('postLogin')));
 
 		$this->page_title = "Admin";
+
+		$this->table = GenericHelper::getTable($this->controller);
+		$this->title = GenericHelper::getTitle($this->controller);
+		$this->filters = GenericHelper::getFilters($this->controller);
+		$this->headers = GenericHelper::getHeaders($this->controller);
 	}
 
 	protected function render($view)

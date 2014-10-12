@@ -2,7 +2,11 @@
 
 @section('content')
 	<div class="container">
+		@if(isset($user))
+		{{ Form::open(array('url' => 'admin/'.$controller.'/update', 'method' => 'post')) }}
+		@else
 		{{ Form::open(array('url' => 'admin/'.$controller.'/save', 'method' => 'post')) }}
+		@endif
 			<div class="row well well-sm">
 				<h2 style="float: left;">{{ $title }}</h2>
 				

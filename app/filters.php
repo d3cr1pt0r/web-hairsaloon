@@ -22,7 +22,7 @@ Route::filter('auth.admin', function(){
 Route::filter('auth.basic', function(){
 	if(!Auth::check())
 	{
-		return Redirect::to('login');
+		return Redirect::to('admin/auth/login');
 	}
 });
 
