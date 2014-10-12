@@ -11,7 +11,9 @@
 |
 */
 
-#Route::controller('/', 'HomeController');
+Route::controller('actions', 'ActionController');
+
+/*
 Route::get('admin/users/{id}', ['uses' => 'UserController@getIndex'])->where('id', '[0-9]+');
 Route::post('admin/users/{id}', ['uses' => 'UserController@postIndex'])->where('id', '[0-9]+');
 
@@ -22,13 +24,4 @@ Route::controller('admin/services', 'ServiceController');
 Route::controller('admin/users', 'UserController');
 Route::controller('admin', 'AdminController');
 Route::controller('actions', 'ActionController');
-
-/*
-Route::get('drek/salama', function() {
-	$view = View::make('frontend.');
-	$view->title = 'This is a title';
-	$view->list = array('drek' => 'salama', 'penis' => 'phallus');
-
-	return $view;
-});
 */
