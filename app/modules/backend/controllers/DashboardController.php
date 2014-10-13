@@ -8,6 +8,8 @@ class DashboardController extends BaseAdminController
 {
 	protected $controller = 'dashboard';
 
+	protected $controller = "dashboard";
+
 	public function getIndex()
 	{
 		$view = View::make('backend::dashboard.view');

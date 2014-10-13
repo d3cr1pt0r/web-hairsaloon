@@ -13,6 +13,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	protected $hidden = array('remember_token');
 
+	public function groups()
+	{
+		return $this->belongsToMany('UsersGroup', 'groups_has_users');
+	}
+
 	public static function AuthenticateAdmin($email, $password)
 	{
 		$user = User::where('email', '=', $email)->first();
