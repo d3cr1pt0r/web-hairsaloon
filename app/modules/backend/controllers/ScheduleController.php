@@ -68,41 +68,30 @@ class ScheduleController extends BaseAdminController
 		$user_array = array();
 		foreach($input['user-id'] as $key=>$val)
 			if($input['shift-active'][$key] == '1')
-				$user_array[$val][] = array($input['shift-id'][$key], $input['slider'][$key]);
+				$user_array[$val][$input['shift-id'][$key]] = $input['slider'][$key];
+
+		//return var_dump($user_array);
 
 		for($i=0;$i<$date_diff;$i++)
 		{
-			foreach($user_array as $key=>$user)
+			foreach($user_array as $id_user=>$user)
 			{
-				
-			}
-		}
+				$schedule = new Schedule;
+				$schedule->id_user = $id_user;
+				$schedule->date = $day_from + $i * $day_in_seconds;
+				$schedule->save();
 
-		/*
-		for($i=0;$i<$date_diff;$i++)
-		{
-			foreach($input['shift-active'] as $key=>$val)
-			{
-				if($val == "1")
+				foreach($user_array[$id_user] as $id_shift=>$shift)
 				{
-					$schedule = new Schedule;
-					$schedule->date = $day_from + $i * $day_in_seconds;
-					//$schedule->save();
-
-					$schedule->id_user = $input['user-id'][$i];
-
 					$user_has_shift = new UserHasShift();
-					$user_has_shift->$input['shift-id'][$i];
-					$user_has_shift->from = explode(':', $input['slider'][$i])[0];
-					$user_has_shift->to = explode(':', $input['slider'][$i])[1];
+					$user_has_shift->id_shifts = $id_shift;
+					$user_has_shift->from = explode(':', $shift)[0];
+					$user_has_shift->to = explode(':', $shift)[1];
 
-					$schedule->save();
 					$schedule->userShifts()->save($user_has_shift);
 				}
 			}
-			//$schedule->save();
 		}
-		*/
 	}
 }
 
