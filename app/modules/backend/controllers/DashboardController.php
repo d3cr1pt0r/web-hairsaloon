@@ -6,6 +6,7 @@ use View;
 
 class DashboardController extends BaseAdminController
 {
+	protected $controller = 'dashboard';
 
 	protected $controller = "dashboard";
 

@@ -12,7 +12,6 @@ class BaseAdminController extends \Controller
 	{
 		$this->beforeFilter('auth.admin', array('except' => array('getLogin', 'postLogin')));
 		$this->beforeFilter('csrf', array('only' => array('postLogin')));
-
 		$this->page_title = "Admin";
 
 		$this->table = GenericHelper::getTable($this->controller);
