@@ -12,6 +12,9 @@ class GenericHelper
 			case 'users':
 				$table = 'users';
 				break;
+			case 'users-groups':
+				$table = 'user_groups';
+				break;
 			case 'shifts':
 				$table = 'shifts';
 				break;
@@ -39,6 +42,9 @@ class GenericHelper
 		{
 			case 'users':
 				$title = 'Uporabniki';
+				break;
+			case 'users-groups':
+				$title = 'Skupine uporabnikov';
 				break;
 			case 'services':
 				$title = 'Storitve';
@@ -126,6 +132,20 @@ class GenericHelper
 						"db" => "email",
 						"header" => 'Email',
 						'type' => "mail_url"
+					),
+					array(
+						"db" => "active",
+						"header" => 'Aktiven',
+						"type" => "checkbox"
+					)
+				);
+				break;
+			case 'users-groups':
+				$headers = array(
+					array(
+						"db" => "name",
+						"header" => 'Ime',
+						'type' => "normal"
 					),
 					array(
 						"db" => "active",

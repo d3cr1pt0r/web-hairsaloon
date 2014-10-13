@@ -8,6 +8,7 @@ Route::controller('admin/services', 'App\Modules\Backend\Controllers\ServiceCont
 Route::controller('admin/shifts', 'App\Modules\Backend\Controllers\ShiftController');
 Route::controller('admin/schedules', 'App\Modules\Backend\Controllers\ScheduleController');
 Route::controller('admin/users', 'App\Modules\Backend\Controllers\UserController');
+Route::controller('admin/users-groups', 'App\Modules\Backend\Controllers\UsersGroupController');
 Route::controller('admin', 'App\Modules\Backend\Controllers\DashboardController');
 
 ?>
