@@ -6,6 +6,7 @@ use View;
 
 class DashboardController extends BaseAdminController
 {
+	protected $controller = 'dashboard';
 
 	public function getIndex()
 	{
