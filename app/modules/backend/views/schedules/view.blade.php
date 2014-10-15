@@ -2,7 +2,7 @@
 
 @section('content')
 	<div class="container">
-		<table class="table-calendar noselect" style="background-color: white;">
+		<table class="table-calendar noselect" style="background-color: white; margin-top: 20px;">
 			<thead>
 				<tr>
 					<th>Pon</th>
@@ -21,13 +21,39 @@
 						@if($day == 0)
 							<td><div></div></td>
 						@else
-							<td><div data-day="{{ $day['mday'] }}" data-month="{{ $day['mon'] }}" data-year="{{ $day['year'] }}" data-unix="{{ $day[0] }}">{{ $day['mday'] }}</div></td>
+							<td>
+								<div class="calendar-day-content" data-day="{{ $day['mday'] }}" data-month="{{ $day['mon'] }}" data-year="{{ $day['year'] }}" data-unix="{{ $day[0] }}">
+									<div style="position: relative;">{{ $day['mday'] }}</div>
+									@if(isset($day['data']))
+										@foreach($day['data'] as $data)
+											<div style="position: relative; background-color: {{ $data['color'] }}; color: black; width: {{ $data['total'] }}%; height: 7px; font-size: 12px; line-height: 15px; border: 1px solid #585858; border-radius: 3px; margin-bottom: 2px;"></div>
+										@endforeach
+									@endif
+								</div>
+							</td>
 						@endif
 					@endforeach
 					</tr>
 				@endforeach
 			</tbody>
 		</table>
+
+		<div class="form-group" style="width: 700px; margin: auto; margin-top: 10px; margin-bottom: 20px;">
+			<label for="exampleInputEmail1">Izberi uporabnika</label>
+			<select class="form-control" name="user">
+				@foreach($users as $user)
+					<option value="{{ $user->id }}">{{ $user->name." ".$user->lastname }}</option>
+				@endforeach
+			</select>
+		</div>
+		<div class="form-group" style="width: 700px; margin: auto;">
+			<label for="exampleInputEmail1">Izmene</label>
+			@foreach($shifts as $shift)
+				<span style="display: block; text-indent: 25px; width: 20px; height: 20px; background-color: {{ $shift->color }}; border: 1px solid #585858; border-radius: 3px; margin-top: 5px; margin-bottom: 7px;">
+					<b>{{ $shift->name }}</b>
+				</span>
+			@endforeach
+		</div>
 
 		<!-- MODAL -->
 		<div class="modal fade" id="schedule-modal">
