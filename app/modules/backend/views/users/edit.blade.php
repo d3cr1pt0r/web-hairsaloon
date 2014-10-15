@@ -34,6 +34,12 @@
 				<input type="hidden" name="id" value="{{ $user->id }}" />
 				@endif
 			</div>
+			<div class="col-md-4">
+				<label>Skupine</label><br />
+				@foreach($usersGroups as $group)
+					<input type="checkbox" name="group_id[]" value="{{ $group->id }}" {{ (in_array($group->id, $checkedUsersGroups) ? 'checked=checked':'') }} /> {{ $group->name }}<br />
+				@endforeach
+			</div>
 		{{ Form::close() }}
 	</div>
 @stop

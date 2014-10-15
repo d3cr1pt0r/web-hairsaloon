@@ -2,7 +2,7 @@
 
 namespace App\Modules\Backend\Controllers;
 
-use View, Input, Redirect, User, GenericHelper;
+use View, Input, Redirect, User, GenericHelper, UsersGroup;
 
 class UserController extends BaseAdminController
 {
@@ -56,6 +56,9 @@ class UserController extends BaseAdminController
 		$view->controller = $this->controller;
 		$view->add = true;
 		$view->access_type = $access_type;
+
+		//SKUPINE UPORABNIKOV
+		$view->usersGroups = UsersGroup::all();
 		
 		return $this->render($view);
 	}
@@ -73,6 +76,15 @@ class UserController extends BaseAdminController
 		$view->add = false;
 		$view->access_type = $access_type;
 
+		//SKUPINE UPORABNIKOV
+		$view->usersGroups = UsersGroup::all();
+		$checkedGroups = $user->groups->toArray();
+		$view->checkedUsersGroups = array();
+		foreach($checkedGroups as $g)
+		{
+			array_push($view->checkedUsersGroups, $g["id"]);
+		}
+		 
 		return $this->render($view);
 	}
 
@@ -106,8 +118,18 @@ class UserController extends BaseAdminController
 		if($password == $password_check)
 		{
 			$input['password'] = sha1($input['password']);
-			if($this->save(new User, $input, $fields))
+			if($user_id = $this->save(new User, $input, $fields)) 
+			{
+				$group_ids = Input::get("group_id");
+				$group = UsersGroup::whereIn("id", $group_ids)->get();
+				foreach($group as $g) 
+				{
+					$user = User::find(Input::get('id'));
+					if (!$user->groups->contains($g->id))
+						$user->groups()->save($g);
+				}
 				return Redirect::to('/admin/users/'.Input::get('access_type'))->with('success', 'Uporabnik dodan!');
+			}
 			return Redirect::to('/admin/users/add/'.Input::get('access_type'))->with('error', 'Prišlo je do napake pri shranjevanju!');
 		}
 
@@ -133,13 +155,24 @@ class UserController extends BaseAdminController
 				return Redirect::to('/admin/users/add/'.Input::get('access_type'))->with('error', 'Gesli se ne ujemata!');
 
 			$fields['password'] = 'required';
+			$input = Input::only(array_keys($fields));
+			$input['password'] = sha1($input['password']);
 		}
+		else
+			$input = Input::only(array_keys($fields));
 
-		$input = Input::only(array_keys($fields));
-		$input['password'] = sha1($input['password']);
-
-		if($this->save(User::findOrFail(Input::get('id')), $input, $fields))
+		if($this->save(User::findOrFail(Input::get('id')), $input, $fields)) 
+		{
+			$group_ids = Input::get("group_id");
+			$group = UsersGroup::whereIn("id", $group_ids)->get();
+			foreach($group as $g) 
+			{
+				$user = User::find(Input::get('id'));
+				if (!$user->groups->contains($g->id))
+					$user->groups()->save($g);
+			}
 			return Redirect::to('/admin/users/'.Input::get('access_type'))->with('success', 'Uporabnik shranjen!');
+		}
 		return Redirect::to('/admin/users/add/'.Input::get('access_type'))->with('error', 'Prišlo je do napake pri shranjevanju!');
 	}
 }

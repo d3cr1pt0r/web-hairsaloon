@@ -15,7 +15,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	public function groups()
 	{
-		return $this->belongsToMany('UsersGroup', 'groups_has_users');
+		return $this->belongsToMany('UsersGroup', 'groups_has_users', 'user_id', 'group_id');
 	}
 
 	public static function AuthenticateAdmin($email, $password)

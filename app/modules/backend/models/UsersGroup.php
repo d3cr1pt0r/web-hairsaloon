@@ -7,7 +7,7 @@
 
 		public function users()
 		{
-			return $this->belongsToMany('User', 'groups_has_users');
+			return $this->belongsToMany('User', 'groups_has_users', 'group_id', 'user_id');
 		}
 	}
 	

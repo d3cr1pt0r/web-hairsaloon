@@ -12,6 +12,7 @@
 					<li>{{ HTML::link('/admin/users/5', 'Stranke') }}</li>
 				</ul>
 			</li>
+			<li>{{ HTML::link('/admin/users-groups', 'Skupine uporabnikov') }}</li>
 			<li>{{ HTML::link('/admin/services', 'Storitve') }}</li>
 			<li>{{ HTML::link('/admin/schedules', 'Urniki') }}</li>
 			<li>{{ HTML::link('/admin/shifts', 'Izmene') }}</li>
