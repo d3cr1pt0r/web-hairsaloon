@@ -12,16 +12,18 @@ class ScheduleController extends BaseAdminController
 	{
 		$view = View::make('backend::schedules.view');
 		$view->title = $this->title;
-		$view->calendar = CalendarHelper::getCalendar();
 
 		$schedules = Schedule::all();
 		$users = User::where('access_type', '>', '1')->where('access_type', '<', '4')->get();
 		$shifts = Shift::all();
 
+		$view->calendar = CalendarHelper::populateCalendar(CalendarHelper::getCalendar(), $users[0]);
 		$view->schedules = $schedules;
 		$view->shifts = $shifts;
 		$view->users = $users;
 		$view->controller = $this->controller;
+
+		//return var_dump($view->calendar[1][0][1]->userShifts->toArray());
 
 		foreach($shifts as $shift)
 		{

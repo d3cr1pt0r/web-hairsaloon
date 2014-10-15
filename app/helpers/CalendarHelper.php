@@ -32,4 +32,28 @@ class CalendarHelper
 		return $calendar_array;
 	}
 
+	public static function populateCalendar($calendar, $user)
+	{
+		$schedules = $user->schedules;
+		
+		foreach($calendar as $key1=>$week)
+		{
+			foreach($week as $key2=>$day) {
+				foreach($schedules as $schedule) {
+					if($day[0] == $schedule->date) {
+						foreach($schedule->userShifts as $shift) {
+							$s = $shift->shift;
+							$workTime = $shift->to - $shift->from;
+							$shiftTime = $s->to - $s->from;
+							$percent = $workTime * 100 / $shiftTime;
+							$calendar[$key1][$key2]['data'][] = array('name' => $s->name, 'total' => floor($percent), 'color' => $s->color);
+						}
+					}
+				}
+			}
+		}
+
+		return $calendar;
+	}
+
 }
