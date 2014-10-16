@@ -59,6 +59,7 @@ class UserController extends BaseAdminController
 
 		//SKUPINE UPORABNIKOV
 		$view->usersGroups = UsersGroup::all();
+		$view->checkedUsersGroups = array();
 		
 		return $this->render($view);
 	}
@@ -104,7 +105,7 @@ class UserController extends BaseAdminController
 			'access_type' => 'required',
 			'name' => 'required',
 			'lastname' => 'required',
-			'email' => 'required',
+			'email' => 'required|unique:users,email',
 			'phone' => 'required',
 			'birthdate' => 'required',
 			'password' => 'required'
@@ -118,22 +119,38 @@ class UserController extends BaseAdminController
 		if($password == $password_check)
 		{
 			$input['password'] = sha1($input['password']);
-			if($user_id = $this->save(new User, $input, $fields)) 
+			$response = $this->save(new User, $input, $fields);
+			if($response->status)
 			{
 				$group_ids = Input::get("group_id");
-				$group = UsersGroup::whereIn("id", $group_ids)->get();
-				foreach($group as $g) 
+				if(!empty($group_ids))
 				{
-					$user = User::find(Input::get('id'));
-					if (!$user->groups->contains($g->id))
-						$user->groups()->save($g);
+					$group = UsersGroup::whereIn("id", $group_ids)->get();
+					foreach($group as $g) 
+					{
+						$user = $response->model;
+						if (!$user->groups->contains($g->id))
+							$user->groups()->attach($g->id);
+					}
 				}
+				else
+					$group_ids = array();
+
+				//delete unchecked groups
+				$user_groups = $user->groups->toArray();
+				foreach($user_groups as $ug)
+				{
+					if(!in_array($ug["id"], $group_ids))
+						$user->groups()->detach($ug["id"]);
+				}
+
 				return Redirect::to('/admin/users/'.Input::get('access_type'))->with('success', 'Uporabnik dodan!');
 			}
-			return Redirect::to('/admin/users/add/'.Input::get('access_type'))->with('error', 'Prišlo je do napake pri shranjevanju!');
+			
+			return Redirect::to('/admin/users/add/'.Input::get('access_type'))->withInput()->with('error', $response->validator->messages()->first());
 		}
 
-		return Redirect::to('/admin/users/add/'.Input::get('access_type'))->with('error', 'Gesli se ne ujemata!');
+		return Redirect::to('/admin/users/add/'.Input::get('access_type'))->withInput()->with('error', 'Gesli se ne ujemata!');
 	}
 
 	public function postUpdate()
@@ -161,19 +178,34 @@ class UserController extends BaseAdminController
 		else
 			$input = Input::only(array_keys($fields));
 
-		if($this->save(User::findOrFail(Input::get('id')), $input, $fields)) 
+		$response = $this->save(User::findOrFail(Input::get('id')), $input, $fields);
+		if($response->status) 
 		{
 			$group_ids = Input::get("group_id");
-			$group = UsersGroup::whereIn("id", $group_ids)->get();
-			foreach($group as $g) 
+			if(!empty($group_ids))
 			{
-				$user = User::find(Input::get('id'));
-				if (!$user->groups->contains($g->id))
-					$user->groups()->save($g);
+				$group = UsersGroup::whereIn("id", $group_ids)->get();
+				foreach($group as $g) 
+				{
+					$user = $response->model;
+					if (!$user->groups->contains($g->id))
+						$user->groups()->attach($g->id);
+				}
 			}
+			else
+				$group_ids = array();
+
+			//delete unchecked groups
+			$user_groups = $user->groups->toArray();
+			foreach($user_groups as $ug)
+			{
+				if(!in_array($ug["id"], $group_ids))
+					$user->groups()->detach($ug["id"]);
+			}
+			
 			return Redirect::to('/admin/users/'.Input::get('access_type'))->with('success', 'Uporabnik shranjen!');
 		}
-		return Redirect::to('/admin/users/add/'.Input::get('access_type'))->with('error', 'Prišlo je do napake pri shranjevanju!');
+		return Redirect::to('/admin/users/add/'.Input::get('access_type'))->withInput()->with('error', $response->validator->messages()->first());
 	}
 }
 

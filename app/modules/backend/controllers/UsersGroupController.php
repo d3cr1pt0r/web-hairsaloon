@@ -63,9 +63,10 @@ class UsersGroupController extends BaseAdminController
 		// Extreme case where input value has to be modified (in this case, from and to)
 		$input = Input::only(array_keys($fields));
 
-		if($this->save(new UsersGroup, $input, $fields))
+		$response = $this->save(new UsersGroup, $input, $fields);
+		if($response->status)
 			return Redirect::to('admin/users-groups')->with('success', 'Skupina je bila dodana v sistem!');
-		return Redirect::to('admin/users-groups')->with('error', 'Prišlo je do napake pri shranjevanju!');
+		return Redirect::to('admin/users-groups')->with('error', $response->validator->messages()->first());
 	}
 
 	public function postUpdate()
@@ -75,8 +76,9 @@ class UsersGroupController extends BaseAdminController
 		// Extreme case where input value has to be modified (in this case, from and to)
 		$input = Input::only(array_keys($fields));
 
-		if($this->save(UsersGroup::findOrFail(Input::get('id')), $input, $fields))
+		$response = $this->save(UsersGroup::findOrFail(Input::get('id')), $input, $fields);
+		if($response->status)
 			return Redirect::to('admin/users-groups')->with('success', 'Skupina shranjena!');
-		return Redirect::to('admin/users-groups')->with('error', 'Prišlo je do napake pri shranjevanju!');
+		return Redirect::to('admin/users-groups')->with('error', $response->validator->messages()->first());
 	}
 }

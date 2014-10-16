@@ -16,25 +16,25 @@
 	</div>
 	<div class=col-md-4>
 		<label>Ime</label><br />
-		<input type="text" class="form-control" name="name" value="{{ $user->name or '' }}" required /><br />
+		<input type="text" class="form-control" name="name" value="{{ $user->name or Input::old('name') }}" required /><br />
 		<label>Priimek</label><br />
-		<input type="text" class="form-control" name="lastname" value="{{ $user->lastname or '' }}" required /><br />
+		<input type="text" class="form-control" name="lastname" value="{{ $user->lastname or Input::old('lastname') }}" required /><br />
 		<label>Email</label><br />
-		<input type="email" class="form-control" name="email" value="{{ $user->email or '' }}" required /><br />
+		<input type="email" class="form-control" name="email" value="{{ $user->email or Input::old('email') }}" required /><br />
 		<label>Telefon</label><br />
-		<input type="tel" class="form-control" name="phone" value="{{ $user->phone or '' }}" required /><br />
+		<input type="tel" class="form-control" name="phone" value="{{ $user->phone or Input::old('phone') }}" required /><br />
 		<label>Datum rojstva</label><br />
-		<input type="date" class="form-control" name="birthdate" value="{{ $user->birthdate or '' }}" required /><br />
+		<input type="date" class="form-control" name="birthdate" value="{{ $user->birthdate or Input::old('birthdate') }}" required /><br />
 	</div>
 	<div class=col-md-4>
 		<label>Naslov</label><br />
-		<input type="text" class="form-control" name="address" value="{{ $user->address or '' }}" /><br />
+		<input type="text" class="form-control" name="address" value="{{ $user->address or Input::old('address') }}" /><br />
 		<label>Poštna številka</label><br />
-		<input type="text" class="form-control" name="post_code" value="{{ $user->post_code or '' }}" /><br />
+		<input type="text" class="form-control" name="post_code" value="{{ $user->post_code or Input::old('post_code') }}" /><br />
 		<label>Pošta</label><br />
-		<input type="text" class="form-control" name="city" value="{{ $user->city or '' }}" /><br />
+		<input type="text" class="form-control" name="city" value="{{ $user->city or Input::old('city') }}" /><br />
 		<label>Država</label><br />
-		<input type="text" class="form-control" name="country" value="{{ $user->country or '' }}" /><br />
+		<input type="text" class="form-control" name="country" value="{{ $user->country or Input::old('country') }}" /><br />
 	</div>
 </div>
  </div>

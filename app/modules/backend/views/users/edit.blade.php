@@ -15,7 +15,7 @@
 			<input type="hidden" name="access_type" value="{{ $access_type }}" />
 			<div class="col-md-4">
 				<label>Email</label><br />
-				<input class="form-control" type="email" name="email" value="{{ $user->email or '' }}" required /><br />
+				<input class="form-control" type="email" name="email" value="{{ $user->email or Input::old('email') }}" required /><br />
 				<label>Geslo</label><br />
 				<input class="form-control" type="password" name="password" value="" {{ (($add) ? 'required':'') }} /><br />
 				<label>Ponovi geslo</label><br />
@@ -23,13 +23,13 @@
 			</div>
 			<div class="col-md-4">
 				<label>Ime</label><br />
-				<input class="form-control" type="text" name="name" value="{{ $user->name or '' }}" required /><br />
+				<input class="form-control" type="text" name="name" value="{{ $user->name or Input::old('name') }}" required /><br />
 				<label>Priimek</label><br />
-				<input class="form-control" type="text" name="lastname" value="{{ $user->lastname or '' }}" required /><br />
+				<input class="form-control" type="text" name="lastname" value="{{ $user->lastname or Input::old('lastname') }}" required /><br />
 				<label>Telefon</label><br />
-				<input class="form-control" type="tel" name="phone" value="{{ $user->phone or '' }}" /><br />
+				<input class="form-control" type="tel" name="phone" value="{{ $user->phone or Input::old('phone') }}" /><br />
 				<label>Datum rojstva</label><br />
-				<input class="form-control" type="date" name="birthdate" value="{{ $user->birthdate or '' }}" /><br />
+				<input class="form-control" type="date" name="birthdate" value="{{ $user->birthdate or Input::old('birthdate') }}" /><br />
 				@if(isset($user))
 				<input type="hidden" name="id" value="{{ $user->id }}" />
 				@endif
@@ -37,7 +37,7 @@
 			<div class="col-md-4">
 				<label>Skupine</label><br />
 				@foreach($usersGroups as $group)
-					<input type="checkbox" name="group_id[]" value="{{ $group->id }}" {{ (in_array($group->id, $checkedUsersGroups) ? 'checked=checked':'') }} /> {{ $group->name }}<br />
+					<input type="checkbox" class="group" name="group_id[]" value="{{ $group->id }}" {{ (in_array($group->id, $checkedUsersGroups) ? 'checked=checked':'') }} /> {{ $group->name }}<br />
 				@endforeach
 			</div>
 		{{ Form::close() }}

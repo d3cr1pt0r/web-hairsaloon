@@ -86,9 +86,9 @@ class ServiceController extends BaseAdminController
 		$fields_intervals = array('desc' => '', 'time' => 'required', 'active_time' => '');
 		$input = Input::only(array_keys($fields));
 
-		$service_id = $this->save(new Service, $input, $fields);
+		$response = $this->save(new Service, $input, $fields);
 
-		if($service_id) 
+		if($response->status) 
 		{
 			$descs = Input::get('desc');
 			$times = Input::get('time');
@@ -96,11 +96,11 @@ class ServiceController extends BaseAdminController
 
 			foreach($times as $key => $val) {
 				$val= explode(':', $val)[0]*60*60 + explode(':', $val)[1]*60;
-				$this->save(new TimePeriod, array("service_id" => $service_id,  "desc" => $descs[$key], "time" => $val, "active_time" => $actives[$key]), $fields_intervals);
+				$this->save(new TimePeriod, array("service_id" => $response->model->id,  "desc" => $descs[$key], "time" => $val, "active_time" => $actives[$key]), $fields_intervals);
 			}
 			return Redirect::to('admin/services')->with('success', 'Storitev shranjena!');
 		}
-		return Redirect::to('admin/services')->with('error', 'Prišlo je do napake pri shranjevanju!');
+		return Redirect::to('admin/services')->with('error', $response->validator->messages()->first());
 	}
 
 	public function postUpdate()
@@ -110,7 +110,9 @@ class ServiceController extends BaseAdminController
 
 		$input = Input::only(array_keys($fields));
 
-		if($this->save(Service::findOrFail(Input::get('id')), $input, $fields)) 
+		$response = $this->save(Service::findOrFail(Input::get('id')), $input, $fields);
+
+		if($response->status) 
 		{
 			$ids = Input::get('interval-id');
 			$descs = Input::get('desc');
@@ -126,7 +128,7 @@ class ServiceController extends BaseAdminController
 			}
 			return Redirect::to('admin/services')->with('success', 'Storitev shranjena!');
 		}
-		return Redirect::to('admin/services')->with('error', 'Prišlo je do napake pri shranjevanju!');
+		return Redirect::to('admin/services')->with('error', $response->validator->messages()->first());
 	}
 }
 

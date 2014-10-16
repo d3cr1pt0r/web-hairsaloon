@@ -2,7 +2,7 @@
 
 namespace App\Modules\Backend\Controllers;
 
-use QueryHelper, Validator, Input, GenericHelper;
+use QueryHelper, Validator, Input, GenericHelper, stdClass;
 
 class BaseAdminController extends \Controller
 {
@@ -33,15 +33,22 @@ class BaseAdminController extends \Controller
 	public function save($model, $input, $fields)
 	{
 		$validator = Validator::make(Input::only(array_keys($fields)), $fields);
+		$response = new stdClass;
 
 		if($validator->fails())
-			return false;
+		{
+			$response->status = false;
+			$response->validator = $validator;
+			return $response;
+		}
 
 		foreach($input as $key=>$value)
 			$model->$key = $value;
 		
 		$model->save();
-		return $model->id;
+		$response->status = true;
+		$response->model = $model;
+		return $response;
 	}
 
 	public function delete($model)

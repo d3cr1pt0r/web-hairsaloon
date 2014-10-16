@@ -28,42 +28,38 @@ class ProfileController extends BaseAdminController
 
 	public function postUpdate()
 	{
-		$fields = array('name', 'lastname', 'email','phone','birthdate','address','post_code','city','country','password');
+		$fields = array('name', 'lastname', 'email','phone','birthdate','address','post_code','city','country');
 		$fields_v = array('name' => 'required',
 						 'lastname' => 'required',
 						  'email' => 'required');
 
 		if(Input::has("password")) 
 		{
-			if(Input::get("password") == Input::get("check-password"))
-			{
-				$input = Input::only($fields);
-				$input["password"] = sha1(Input::get("password"));
-				if($this->save(User::findOrFail(Auth::id()), $input, $fields_v))
-				{
-					return Redirect::to('admin/profile')->with('success', 'Podatki shranjeni!');
-				}
-				else
-				{
-					return Redirect::to('admin/profile')->with('error', 'Prišlo je do napake pri shranjevanju!');
-				}
-			}
-			else
-			{
-				return Redirect::to('admin/profile')->with('error', 'Gesli se ne ujemata!');
-			}
-		}
-		else
-		{
+			$fields_v["check-password"] = "required";
+			$fields_v["password"] = "required|same:check-password";
 			$input = Input::only($fields);
 			$input["password"] = sha1(Input::get("password"));
-			if($this->save(User::findOrFail(Auth::id()), $input, $fields_v))
+			$response = $this->save(User::findOrFail(Auth::id()), $input, $fields_v);
+			if($response->status)
 			{
 				return Redirect::to('admin/profile')->with('success', 'Podatki shranjeni!');
 			}
 			else
 			{
-				return Redirect::to('admin/profile')->with('error', 'Prišlo je do napake pri shranjevanju!');
+				return Redirect::to('admin/profile/edit')->withInput()->with('error', $response->validator->messages()->first());
+			}
+		}
+		else
+		{
+			$input = Input::only($fields);
+			$response = $this->save(User::findOrFail(Auth::id()), $input, $fields_v);
+			if($response->status)
+			{
+				return Redirect::to('admin/profile')->with('success', 'Podatki shranjeni!');
+			}
+			else
+			{
+				return Redirect::to('admin/profile/edit')->withInput()->with('error', $response->validator->messages()->first());
 			}
 		}
 	}

@@ -41,9 +41,10 @@ class ShiftController extends BaseAdminController
 		$input['from'] = explode(':', $input['from'])[0]*60*60 + explode(':', $input['from'])[1]*60;
 		$input['to'] = explode(':', $input['to'])[0]*60*60 + explode(':', $input['to'])[1]*60;
 
-		if($this->save(new Shift, $input, $fields))
+		$response = $this->save(new Shift, $input, $fields);
+		if($response->status)
 			return Redirect::to('admin/shifts')->with('success', 'Izmena je bila dodana v sistem!');
-		return Redirect::to('admin/shifts')->with('error', 'Prišlo je do napake pri shranjevanju!');
+		return Redirect::to('admin/shifts')->with('error', $response->validator->messages()->first());
 	}
 
 	public function postUpdate()
@@ -55,9 +56,10 @@ class ShiftController extends BaseAdminController
 		$input['from'] = explode(':', $input['from'])[0]*60*60 + explode(':', $input['from'])[1]*60;
 		$input['to'] = explode(':', $input['to'])[0]*60*60 + explode(':', $input['to'])[1]*60;
 
-		if($this->save(Shift::findOrFail(Input::get('id')), $input, $fields))
+		$response = $this->save(Shift::findOrFail(Input::get('id')), $input, $fields);
+		if($response->status)
 			return Redirect::to('admin/shifts')->with('success', 'Izmena shranjena!');
-		return Redirect::to('admin/shifts')->with('error', 'Prišlo je do napake pri shranjevanju!');
+		return Redirect::to('admin/shifts')->with('error', $response->validator->messages()->first());
 	}
 
 	public function getEdit($id)
