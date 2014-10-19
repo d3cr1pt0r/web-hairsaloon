@@ -3,7 +3,7 @@
 @section('content')
 	<div class="row well well-sm">
 	<h2 style="float: left;">{{ $title }}</h2>
-	<a style="float: right; margin: 20px; margin-left: 5px;" href="/admin/{{ $controller }}/add/{{ $access_type or '' }}">
+	<a style="float: right; margin: 20px; margin-left: 5px;" href="/admin/{{ $controller }}/add">
 		<button type="button" class="btn btn-primary btn-sm">Dodaj</button>
 	</a>
 	@if(isset($filters))
@@ -64,7 +64,7 @@
 	    				@endif
 	    			@endforeach
 	    			<td align="right">
-	    				<a href="/admin/{{ $controller }}/edit/{{ (isset($access_type) ? $access_type . '/':'') }}{{ $d->id }}">
+	    				<a href="/admin/{{ $controller }}/edit/{{ $d->id }}">
 	    					<button type="button" class="btn btn-default btn-sm">Uredi</button>
 	    				</a>
 	    				<a href="/admin/{{ $controller }}/delete/{{ $d->id }}" onclick="return confirm('Ali res želite izbrisati vsebino?');">

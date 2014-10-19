@@ -2,7 +2,7 @@
 
 namespace App\Modules\Backend\Controllers;
 
-use QueryHelper, Validator, Input, GenericHelper, stdClass;
+use QueryHelper, Validator, Input, GenericHelper, stdClass, UsersGroup;
 
 class BaseAdminController extends \Controller
 {
@@ -23,6 +23,10 @@ class BaseAdminController extends \Controller
 	protected function render($view)
 	{
 		$view->page_title = $this->page_title;
+
+		//navigation
+		$view->userGroups = UsersGroup::all();
+
 		return $view;
 	}
 

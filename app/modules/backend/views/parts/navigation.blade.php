@@ -6,10 +6,10 @@
 		<ul class="nav navbar-nav">
 			<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Uporabniki <b class="caret"></b></a>
 				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-					<li>{{ HTML::link('/admin/users', 'Super administratorji') }}</li>
-					<li>{{ HTML::link('/admin/users/2', 'Administratorji') }}</li>
-					<li>{{ HTML::link('/admin/users/3', 'Frizerji') }}</li>
-					<li>{{ HTML::link('/admin/users/5', 'Stranke') }}</li>
+					<li><a href="/admin/users">Vsi</a></li>
+					@foreach($userGroups as $group)
+						<li>{{ HTML::link('/admin/users/'.$group->id, $group->name) }}</li>
+					@endforeach
 				</ul>
 			</li>
 			<li>{{ HTML::link('/admin/users-groups', 'Skupine uporabnikov') }}</li>

@@ -8,18 +8,23 @@ class UserController extends BaseAdminController
 {
 	protected $controller = 'users';
 
-	public function getIndex($access_type = 1)
+	public function getIndex($access_type = null)
 	{
 		$view = View::make('backend::table');
-		$view->title = "Uporabniki - ".GenericHelper::getAccesTypeString($access_type);
+		$view->title = "Uporabniki";
 		$view->controller = $this->controller;
 		$view->table = $this->table;
 
 		// Data
-		$data["access_type"] = $access_type;	
-		$users = $this->filterData($this->table, $data);
+		if($access_type != null) 
+		{
+			$group = UsersGroup::find($access_type);
+			$users = UsersGroup::find($access_type)->users;
+			$view->title .= ' - '.$group->name;
+		}
+		else	
+			$users = User::all();
 
-		$view->access_type = $access_type;
 		$view->filters = $this->filters;
 		$view->headers = $this->headers;
 		$view->data = $users;
@@ -27,7 +32,7 @@ class UserController extends BaseAdminController
 		return $this->render($view);
 	}
 
-	public function postIndex($access_type = 1)
+	public function postIndex($access_type = null)
 	{
 		$view = View::make('backend::table');
 		$view->title = "Uporabniki - ".GenericHelper::getAccesTypeString($access_type);
@@ -49,13 +54,12 @@ class UserController extends BaseAdminController
 		return $this->render($view);
 	}
 
-	public function getAdd($access_type = 1) 
+	public function getAdd()
 	{
 		$view = View::make('backend::users.edit');
-		$view->title = "Dodaj uporabnika - ".GenericHelper::getAccesTypeString($access_type);
+		$view->title = "Dodaj uporabnika";
 		$view->controller = $this->controller;
 		$view->add = true;
-		$view->access_type = $access_type;
 
 		//SKUPINE UPORABNIKOV
 		$view->usersGroups = UsersGroup::all();
@@ -64,7 +68,7 @@ class UserController extends BaseAdminController
 		return $this->render($view);
 	}
 
-	public function getEdit($access_type = 1, $id)
+	public function getEdit($id)
 	{
 		$user = User::find($id);
 		if($user == null)
@@ -72,10 +76,9 @@ class UserController extends BaseAdminController
 
 		$view = View::make('backend::users.edit');
 		$view->user = $user;
-		$view->title = "Uredi uporabnika - ".GenericHelper::getAccesTypeString($access_type);
+		$view->title = "Uredi uporabnika";
 		$view->controller = $this->controller;
 		$view->add = false;
-		$view->access_type = $access_type;
 
 		//SKUPINE UPORABNIKOV
 		$view->usersGroups = UsersGroup::all();
@@ -102,7 +105,6 @@ class UserController extends BaseAdminController
 	public function postSave()
 	{
 		$fields = array(
-			'access_type' => 'required',
 			'name' => 'required',
 			'lastname' => 'required',
 			'email' => 'required|unique:users,email',
@@ -144,19 +146,18 @@ class UserController extends BaseAdminController
 						$user->groups()->detach($ug["id"]);
 				}
 
-				return Redirect::to('/admin/users/'.Input::get('access_type'))->with('success', 'Uporabnik dodan!');
+				return Redirect::back()->with('success', 'Uporabnik dodan!');
 			}
 			
-			return Redirect::to('/admin/users/add/'.Input::get('access_type'))->withInput()->with('error', $response->validator->messages()->first());
+			return Redirect::back()->withInput()->with('error', $response->validator->messages()->first());
 		}
 
-		return Redirect::to('/admin/users/add/'.Input::get('access_type'))->withInput()->with('error', 'Gesli se ne ujemata!');
+		return Redirect::back()->withInput()->with('error', 'Gesli se ne ujemata!');
 	}
 
 	public function postUpdate()
 	{
 		$fields = array(
-			'access_type' => 'required',
 			'name' => 'required',
 			'lastname' => 'required',
 			'email' => 'required',
@@ -203,9 +204,9 @@ class UserController extends BaseAdminController
 					$user->groups()->detach($ug["id"]);
 			}
 			
-			return Redirect::to('/admin/users/'.Input::get('access_type'))->with('success', 'Uporabnik shranjen!');
+			return Redirect::back()->with('success', 'Uporabnik shranjen!');
 		}
-		return Redirect::to('/admin/users/add/'.Input::get('access_type'))->withInput()->with('error', $response->validator->messages()->first());
+		return Redirect::back()->withInput()->with('error', $response->validator->messages()->first());
 	}
 }
 

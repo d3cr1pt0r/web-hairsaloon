@@ -8,7 +8,7 @@ class UsersGroupController extends BaseAdminController
 {
 	protected $controller = 'users-groups';
 
-	public function getIndex($access_type = 1)
+	public function getIndex()
 	{
 		$view = View::make('backend::table');
 		$view->title = "Skupine uporabnikov";

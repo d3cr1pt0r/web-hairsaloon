@@ -12,7 +12,6 @@
 				
 				<input style="float: right; margin: 20px;" type="submit" class="btn btn-primary btn-sm" value="Shrani">
 			</div>
-			<input type="hidden" name="access_type" value="{{ $access_type }}" />
 			<div class="col-md-4">
 				<label>Email</label><br />
 				<input class="form-control" type="email" name="email" value="{{ $user->email or Input::old('email') }}" required /><br />
